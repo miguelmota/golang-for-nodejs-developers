@@ -29,15 +29,41 @@ This guide full of examples is intended for people learning Go that are coming f
     - [big endian](#buffers)
     - [little endian](#buffers)
     - [hex](#buffers)
+  - [maps](#maps)
+  <!--
+  - [objects](#objects)
+  - [destructuring](#destructuring)
+  - [spreading](#spreading)
+  -->
   - [classes](#classes)
     - [constructors](#classes)
     - [instantiation](#classes)
     - ["this"](#classes)
   - [timeout](#timeout)
   - [interval](#interval)
+  <!--
+  - [IIFE](#iife)
+  -->
+  <!--
+  - [files](#files)
+    - [creating](#files)
+    - [opening](#files)
+    - [reading](#files)
+    - [writing](#files)
+    - [closing](#files)
+    - [file descriptors](#files)
+  - [json](#json)
+  - [big numbers](#big-numbers)
+  - [async/await](#async-await)
+  - [try/catch](#try-catch)
+  -->
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
   - [http server](#http-server)
+  <!--
+  - [env vars](#env-vars)
+  - [cli args](#cli-args)
+  -->
 - [License](#license)
 
 ## Examples
@@ -613,7 +639,7 @@ Output
 [a c C]
 ```
 
-### Buffers
+### buffers
 ---
 
 Examples of how to allocate a buffer, write in big or little endian format, and encode to a hex string.
@@ -717,7 +743,78 @@ Output
 ab9078563412
 ```
 
-### Classes
+### maps
+---
+
+#### Node.js
+
+```node
+const map = new Map()
+map.set('foo', 'bar')
+
+let found = map.has('foo')
+console.log(found)
+
+let item = map.get('foo')
+console.log(item)
+
+map.delete('foo')
+
+found = map.has('foo')
+console.log(found)
+
+item = map.get('foo')
+console.log(item)
+
+const map2 = {}
+map2['foo'] = 'bar'
+item = map2['foo']
+delete map2['foo']
+```
+
+Output
+
+```bash
+true
+bar
+false
+undefined
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	myMap := make(map[string]string)
+
+	myMap["foo"] = "bar"
+
+	item, found := myMap["foo"]
+	fmt.Println(found)
+	fmt.Println(item)
+
+	delete(myMap, "foo")
+
+	item, found = myMap["foo"]
+	fmt.Println(found)
+	fmt.Println(item)
+}
+```
+
+Output
+
+```bash
+true
+bar
+false
+
+```
+
+### classes
 ---
 
 Examples of classes, constructors, instantiation, and "this" keyword.
