@@ -6,3 +6,6 @@ console.log(clone)
 
 const sub = array.slice(2,4)
 console.log(sub)
+
+const concatenated = clone.concat([6, 7])
+console.log(concatenated)

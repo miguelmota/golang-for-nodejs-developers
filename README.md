@@ -8,6 +8,9 @@
   - [comments](#comments)
   - [print](#print)
   - [arrays](#arrays)
+    - [slice](#arrays)
+    - [copy](#arrays)
+    - [concat](#arrays)
   - [uint8 arrays](#uint8-arrays)
   - [classes](#classes)
     - [constructors](#classes)
@@ -93,6 +96,8 @@ hello 5 worlds
 ### arrays
 ---
 
+Examples of slicing, copying, and concatenating arrays
+
 #### Node.js
 
 ```node
@@ -104,6 +109,9 @@ console.log(clone)
 
 const sub = array.slice(2,4)
 console.log(sub)
+
+const concatenated = clone.concat([6, 7])
+console.log(concatenated)
 ```
 
 Output
@@ -112,6 +120,7 @@ Output
 [ 1, 2, 3, 4, 5 ]
 [ 1, 2, 3, 4, 5 ]
 [ 3, 4 ]
+[ 1, 2, 3, 4, 5, 6, 7 ]
 ```
 
 #### Go
@@ -122,15 +131,18 @@ package main
 import "fmt"
 
 func main() {
-	array := []int{1, 2, 3, 4, 5}
+	array := []byte{1, 2, 3, 4, 5}
 	fmt.Println(array)
 
-	clone := make([]int, len(array))
+	clone := make([]byte, len(array))
 	copy(clone, array)
 	fmt.Println(clone)
 
 	sub := array[2:4]
 	fmt.Println(sub)
+
+	concatenated := append(array, []byte{6, 7}...)
+	fmt.Println(concatenated)
 }
 ```
 
@@ -140,7 +152,7 @@ Output
 [1 2 3 4 5]
 [1 2 3 4 5]
 [3 4]
-
+[1 2 3 4 5 6 7]
 ```
 
 ### uint8 arrays
