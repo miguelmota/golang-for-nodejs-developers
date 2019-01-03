@@ -30,11 +30,10 @@ This guide full of examples is intended for people learning Go that are coming f
     - [little endian](#buffers)
     - [hex](#buffers)
   - [maps](#maps)
-  <!--
   - [objects](#objects)
   - [destructuring](#destructuring)
-  - [spreading](#spreading)
-  -->
+  - [spread](#spread)
+  - [rest](#rest)
   - [classes](#classes)
     - [constructors](#classes)
     - [instantiation](#classes)
@@ -812,6 +811,226 @@ true
 bar
 false
 
+```
+
+### objects
+---
+
+#### Node.js
+
+```node
+const obj = {
+  someProperty: 'bar',
+  someMethod: (prop) => {
+    return obj[prop]
+  }
+}
+
+let item =  obj.someProperty
+console.log(item)
+
+item = obj.someMethod('someProperty')
+console.log(item)
+```
+
+Output
+
+```bash
+bar
+bar
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+type Obj struct {
+	SomeProperty string
+}
+
+func NewObj(someProperty string) *Obj {
+	return &Obj{
+		SomeProperty: someProperty,
+	}
+}
+
+func (o *Obj) SomeMethod(prop string) string {
+	if prop == "SomeProperty" {
+		return o.SomeProperty
+	}
+
+	return ""
+}
+
+func main() {
+	obj := NewObj("bar")
+
+	item := obj.SomeProperty
+	fmt.Println(item)
+
+	item = obj.SomeMethod("SomeProperty")
+	fmt.Println(item)
+}
+```
+
+Output
+
+```bash
+bar
+bar
+```
+
+### destructuring
+---
+
+#### Node.js
+
+```node
+const obj = { key: 'foo', value: 'bar' }
+
+const { key, value } = obj
+console.log(key, value)
+```
+
+Output
+
+```bash
+foo bar
+```
+
+#### Go
+
+(closest thing to destructuring is using multiple return values)
+
+```go
+package main
+
+import "fmt"
+
+type Obj struct {
+	Key   string
+	Value string
+}
+
+func (o *Obj) Read() (string, string) {
+	return o.Key, o.Value
+}
+
+func main() {
+	obj := Obj{
+		Key:   "foo",
+		Value: "bar",
+	}
+
+	key, value := obj.Read()
+
+	fmt.Println(key, value)
+}
+```
+
+Output
+
+```bash
+foo bar
+```
+
+### spread
+---
+
+#### Node.js
+
+```node
+const array = [1, 2, 3, 4, 5]
+
+console.log(...array)
+```
+
+Output
+
+```bash
+1 2 3 4 5
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	array := []byte{1, 2, 3, 4, 5}
+
+	var i []interface{}
+	for _, value := range array {
+		i = append(i, value)
+	}
+
+	fmt.Println(i...)
+}
+```
+
+Output
+
+```bash
+1 2 3 4 5
+```
+
+### rest
+---
+
+#### Node.js
+
+```node
+function sum(...nums) {
+	let t = 0
+
+	for (n of nums) {
+		t += n
+	}
+
+	return t
+}
+
+const total = sum(1, 2, 3, 4, 5)
+console.log(total)
+```
+
+Output
+
+```bash
+15
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func sum(nums ...int) int {
+	var t int
+	for _, n := range nums {
+		t += n
+	}
+
+	return t
+}
+
+func main() {
+	total := sum(1, 2, 3, 4, 5)
+	fmt.Println(total)
+}
+```
+
+Output
+
+```bash
+15
 ```
 
 ### classes
