@@ -15,19 +15,26 @@ This guide full of examples is intended for people learning Go that are coming f
   - [while](#while)
   - [switch](#switch)
   - [arrays](#arrays)
-    - [slice](#arrays)
-    - [copy](#arrays)
-    - [append](#arrays)
+    - [slicing](#arrays)
+    - [copying](#arrays)
+    - [appending](#arrays)
   - [uint8 arrays](#uint8-arrays)
   - [array iteration](#array-iteration)
     - [looping](#array-iteration)
     - [mapping](#array-iteration)
     - [filtering](#array-iteration)
     - [reducing](#array-iteration)
+  - [buffers](#buffers)
+    - [allocate](#buffers)
+    - [big endian](#buffers)
+    - [little endian](#buffers)
+    - [hex](#buffers)
   - [classes](#classes)
     - [constructors](#classes)
     - [instantiation](#classes)
     - ["this"](#classes)
+  - [timeout](#timeout)
+  - [interval](#interval)
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
   - [http server](#http-server)
@@ -606,6 +613,110 @@ Output
 [a c C]
 ```
 
+### Buffers
+---
+
+Examples of how to allocate a buffer, write in big or little endian format, and encode to a hex string.
+
+#### Node.js
+
+```node
+const buf = Buffer.alloc(6)
+
+let value = 0x1234567890ab
+let offset = 0
+let byteLength = 6
+
+buf.writeUIntBE(value, offset, byteLength)
+
+let hexstr = buf.toString('hex')
+console.log(hexstr)
+
+const buf2 = Buffer.alloc(6)
+
+value = 0x1234567890ab
+offset = 0
+byteLength = 6
+
+buf2.writeUIntLE(value, offset, byteLength)
+
+hexstr = buf2.toString('hex')
+console.log(hexstr)
+```
+
+Output
+
+```bash
+1234567890ab
+ab9078563412
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"bytes"
+	"encoding/binary"
+	"encoding/hex"
+	"fmt"
+	"log"
+	"math/big"
+)
+
+func writeUIntBE(buffer []byte, value, offset, byteLength int64) {
+	slice := make([]byte, byteLength)
+	val := new(big.Int)
+	val.SetUint64(uint64(value))
+	valBytes := val.Bytes()
+
+	buf := bytes.NewBuffer(slice)
+	err := binary.Write(buf, binary.BigEndian, &valBytes)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	slice = buf.Bytes()
+	slice = slice[int64(len(slice))-byteLength : len(slice)]
+
+	copy(buffer[offset:], slice)
+}
+
+func writeUIntLE(buffer []byte, value, offset, byteLength int64) {
+	slice := make([]byte, byteLength)
+	val := new(big.Int)
+	val.SetUint64(uint64(value))
+	valBytes := val.Bytes()
+
+	tmp := make([]byte, len(valBytes))
+	for i := range valBytes {
+		tmp[i] = valBytes[len(valBytes)-1-i]
+	}
+	copy(slice, tmp)
+	copy(buffer[offset:], slice)
+}
+
+func main() {
+		buf := make([]byte, 6)
+		writeUIntBE(buf, 0x1234567890ab, 0, 6)
+
+		fmt.Println(hex.EncodeToString(buf))
+
+		buf2 := make([]byte, 6)
+		writeUIntLE(buf2, 0x1234567890ab, 0, 6)
+
+		fmt.Println(hex.EncodeToString(buf2))
+}
+```
+
+Output
+
+```bash
+1234567890ab
+ab9078563412
+```
+
 ### Classes
 ---
 
@@ -687,6 +798,126 @@ Output
 ```bash
 bar
 qux
+```
+
+### timeout
+---
+
+#### Node.js
+
+```node
+setTimeout(callback, 1e3)
+
+function callback() {
+  console.log('called')
+}
+```
+
+Output
+
+```bash
+called
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+var wg sync.WaitGroup
+
+func callback() {
+	defer wg.Done()
+	fmt.Println("called")
+}
+
+func main() {
+	wg.Add(1)
+	time.AfterFunc(1*time.Second, callback)
+	wg.Wait()
+}
+```
+
+Output
+
+```bash
+called
+```
+
+### interval
+---
+
+#### Node.js
+
+```node
+let i = 0
+
+const id = setInterval(callback, 1e3)
+
+function callback() {
+  console.log('called', i)
+
+  if (i === 3) {
+    clearInterval(id)
+  }
+
+  i++
+}
+```
+
+Output
+
+```bash
+called 0
+called 1
+called 2
+called 3
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func callback(i int) {
+	fmt.Println("called", i)
+}
+
+func main() {
+	ticker := time.NewTicker(1 * time.Second)
+
+	i := 0
+	for range ticker.C {
+		callback(i)
+
+		if i == 3 {
+			ticker.Stop()
+			break
+		}
+
+		i++
+	}
+}
+```
+
+Output
+
+```bash
+called 0
+called 1
+called 2
+called 3
 ```
 
 ### exec (sync)
