@@ -9,11 +9,19 @@ This guide full of examples is intended for people learning Go that are coming f
 - [Examples](#examples)
   - [comments](#comments)
   - [print](#print)
+  - [for](#for)
+  - [while](#while)
+  - [switch](#switch)
   - [arrays](#arrays)
     - [slice](#arrays)
     - [copy](#arrays)
     - [append](#arrays)
   - [uint8 arrays](#uint8-arrays)
+  - [array iteration](#array-iteration)
+    - [looping](#array-iteration)
+    - [mapping](#array-iteration)
+    - [filtering](#array-iteration)
+    - [reducing](#array-iteration)
   - [classes](#classes)
     - [constructors](#classes)
     - [instantiation](#classes)
@@ -93,6 +101,195 @@ Output
 hello world
 hello world
 hello 5 worlds
+```
+
+### for
+---
+
+#### Node.js
+
+```node
+for (let i = 0; i <= 5; i++) {
+  console.log(i)
+}
+```
+
+Output
+
+```bash
+0
+1
+2
+3
+4
+5
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	for i := 0; i <= 5; i++ {
+		fmt.Println(i)
+	}
+}
+```
+
+Output
+
+```bash
+0
+1
+2
+3
+4
+5
+```
+
+### while
+---
+
+#### Node.js
+
+```node
+let i = 0
+
+while (i <= 5) {
+  console.log(i)
+
+  i++
+}
+```
+
+Output
+
+```bash
+0
+1
+2
+3
+4
+5
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	i := 0
+
+	for i <= 5 {
+		fmt.Println(i)
+
+		i++
+	}
+}
+```
+
+Output
+
+```bash
+0
+1
+2
+3
+4
+5
+```
+
+### switch
+---
+
+#### Node.js
+
+```node
+const value = 'c'
+
+switch(value) {
+  case 'a':
+    console.log('A')
+    break
+  case 'b':
+    console.log('B')
+    break
+  case 'c':
+    console.log('C')
+    break
+  default:
+    console.log('default')
+}
+
+switch(value) {
+  case 'a':
+    console.log('A - falling through')
+  case 'b':
+    console.log('B - falling through')
+  case 'c':
+    console.log('C - falling through')
+  default:
+    console.log('default')
+}
+```
+
+Output
+
+```bash
+C
+C - falling through
+default
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	value := "c"
+
+	switch value {
+	case "a":
+		fmt.Println("A")
+	case "b":
+		fmt.Println("B")
+	case "c":
+		fmt.Println("C")
+	default:
+		fmt.Println("default")
+	}
+
+	switch value {
+	case "a":
+		fmt.Println("A - falling through")
+		fallthrough
+	case "b":
+		fmt.Println("B - falling through")
+		fallthrough
+	case "c":
+		fmt.Println("C - falling through")
+		fallthrough
+	default:
+		fmt.Println("default")
+	}
+}
+```
+
+Output
+
+```bash
+C
+C - falling through
+default
 ```
 
 ### arrays
@@ -198,12 +395,12 @@ package main
 import "fmt"
 
 func main() {
-	array := make([]byte, 10)
+	array := make([]uint8, 10)
 	fmt.Println(array)
 
 	offset := 1
 
-	copy(array[offset:], []byte{1, 2, 3})
+	copy(array[offset:], []uint8{1, 2, 3})
 	fmt.Println(array)
 
 	sub := array[2:]
@@ -224,6 +421,109 @@ Output
 [2 3 0 0 0 0 0 0]
 [2 3]
 10
+```
+
+### array iteration
+---
+
+Examples of iterating, mapping, filtering, and reducing arrays.
+
+#### Node.js
+
+```node
+const array = ['a', 'b', 'c']
+
+array.forEach((value, i) => {
+  console.log(i, value)
+})
+
+const mapped = array.map(value => {
+  return value.toUpperCase()
+})
+
+console.log(mapped)
+
+const filtered = array.filter((value, i) => {
+  return i % 2 == 0
+})
+
+console.log(filtered)
+
+const reduced = array.reduce((acc, value, i) => {
+  if (i % 2 == 0) {
+    acc.push(value.toUpperCase())
+  }
+
+  return acc
+}, [])
+
+console.log(reduced)
+```
+
+Output
+
+```bash
+0 'a'
+1 'b'
+2 'c'
+[ 'A', 'B', 'C' ]
+[ 'a', 'c' ]
+[ 'A', 'C' ]
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func main() {
+	array := []string{"a", "b", "c"}
+
+	for i, value := range array {
+		fmt.Println(i, value)
+	}
+
+	mapped := make([]string, len(array))
+	for i, value := range array {
+		mapped[i] = strings.ToUpper(value)
+	}
+
+	fmt.Println(mapped)
+
+	var filtered []string
+	for i, value := range array {
+		if i%2 == 0 {
+			filtered = append(filtered, value)
+		}
+	}
+
+	fmt.Println(filtered)
+
+	var reduced []string
+	for i, value := range array {
+		if i%2 == 0 {
+			reduced = append(filtered, strings.ToUpper(value))
+		}
+	}
+
+	fmt.Println(reduced)
+}
+```
+
+Output
+
+```bash
+0 a
+1 b
+2 c
+[A B C]
+[a c]
+[a c C]
 ```
 
 ### Classes

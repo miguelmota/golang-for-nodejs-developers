@@ -3,12 +3,12 @@ package main
 import "fmt"
 
 func main() {
-	array := make([]byte, 10)
+	array := make([]uint8, 10)
 	fmt.Println(array)
 
 	offset := 1
 
-	copy(array[offset:], []byte{1, 2, 3})
+	copy(array[offset:], []uint8{1, 2, 3})
 	fmt.Println(array)
 
 	sub := array[2:]
