@@ -9,6 +9,8 @@ This guide full of examples is intended for people learning Go that are coming f
 - [Examples](#examples)
   - [comments](#comments)
   - [print](#print)
+  - [if/else](#ifelse)
+    - [ternary](#ifelse)
   - [for](#for)
   - [while](#while)
   - [switch](#switch)
@@ -103,6 +105,82 @@ hello world
 hello 5 worlds
 ```
 
+### if/else
+---
+
+#### Node.js
+
+```node
+const array = [1, 2]
+
+if (array) {
+  console.log('array exists')
+}
+
+if (array.length === 2) {
+  console.log('length is 2')
+} else if (array.length === 1) {
+  console.log('length is 1')
+} else {
+  console.log('length is other')
+}
+
+const isOddLength = array.length % 2 == 1 ? 'yes' : 'no'
+
+console.log(isOddLength)
+```
+
+Output
+
+```bash
+array exists
+length is 2
+no
+```
+
+#### Go
+
+(there is no ternary operator in Go)
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	array := []byte{1, 2}
+
+	if array != nil {
+		fmt.Println("array exists")
+	}
+
+	if len(array) == 2 {
+		fmt.Println("length is 2")
+	} else if len(array) == 1 {
+		fmt.Println("length is 1")
+	} else {
+		fmt.Println("length is other")
+	}
+
+	var isOddLength string
+	if len(array)%2 == 1 {
+		isOddLength = "yes"
+	} else {
+		isOddLength = "no"
+	}
+
+	fmt.Println(isOddLength)
+}
+```
+
+Output
+
+```bash
+array exists
+length is 2
+no
+```
+
 ### for
 ---
 
@@ -177,6 +255,8 @@ Output
 ```
 
 #### Go
+
+(there is no *while* in Go)
 
 ```go
 package main
