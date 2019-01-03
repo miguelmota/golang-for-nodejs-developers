@@ -1,6 +1,6 @@
 # Golang for Node.js Developers
 
-> Node.js vs Node.js examples
+> [Node.js](https://nodejs.org/) vs [Golang](https://golang.org/) examples
 
 ## Contents
 
