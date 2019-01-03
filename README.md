@@ -7,7 +7,7 @@
 - [Examples](#examples)
   - [print](#print)
   - [arrays](#arrays)
-  - [uint8 array](#uint8-array)
+  - [uint8 arrays](#uint8-arrays)
   - [classes](#classes)
     - [constructors](#classes)
     - [instantiation](#classes)
@@ -19,6 +19,7 @@
 ## Examples
 
 ### Print
+---
 
 #### Node.js
 
@@ -59,6 +60,7 @@ hello 5 worlds
 ```
 
 ### arrays
+---
 
 #### Node.js
 
@@ -110,7 +112,8 @@ Output
 
 ```
 
-### uint8 array
+### uint8 arrays
+---
 
 #### Node.js
 
@@ -179,6 +182,7 @@ Output
 ```
 
 ### Classes
+---
 
 Examples of classes, constructors, instantiation, and "this" keyword
 
@@ -261,6 +265,7 @@ qux
 ```
 
 ### exec (sync)
+---
 
 #### Node.js
 
@@ -305,6 +310,7 @@ hello world
 ```
 
 ### exec (async)
+---
 
 #### Node.js
 
