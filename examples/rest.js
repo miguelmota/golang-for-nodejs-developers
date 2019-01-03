@@ -1,7 +1,7 @@
 function sum(...nums) {
 	let t = 0
 
-	for (n of nums) {
+	for (let n of nums) {
 		t += n
 	}
 

@@ -51,7 +51,11 @@ This guide full of examples is intended for people learning Go that are coming f
     - [writing](#files)
     - [closing](#files)
     - [file descriptors](#files)
+  -->
   - [json](#json)
+    - [parse](#json)
+    - [stringify](#json)
+  <!--
   - [big numbers](#big-numbers)
   - [async/await](#async-await)
   - [try/catch](#try-catch)
@@ -59,10 +63,8 @@ This guide full of examples is intended for people learning Go that are coming f
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
   - [http server](#http-server)
-  <!--
   - [env vars](#env-vars)
   - [cli args](#cli-args)
-  -->
 - [License](#license)
 
 ## Examples
@@ -988,7 +990,7 @@ Output
 function sum(...nums) {
 	let t = 0
 
-	for (n of nums) {
+	for (let n of nums) {
 		t += n
 	}
 
@@ -1236,6 +1238,68 @@ called 2
 called 3
 ```
 
+### json
+---
+
+Examples of how to parse JSON and stringify (marshal).
+
+#### Node.js
+
+```node
+let jsonstr = '{"foo":"bar"}'
+
+let parsed = JSON.parse(jsonstr)
+console.log(parsed)
+
+jsonstr = JSON.stringify(parsed)
+console.log(jsonstr)
+```
+
+Output
+
+```bash
+{ foo: 'bar' }
+{"foo":"bar"}
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type T struct {
+	Foo string `json:"foo"`
+}
+
+func main() {
+	jsonstr := `{"foo":"bar"}`
+
+	t := new(T)
+	err := json.Unmarshal([]byte(jsonstr), t)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(t)
+
+	marshalled, err := json.Marshal(t)
+	jsonstr = string(marshalled)
+	fmt.Println(jsonstr)
+}
+```
+
+Output
+
+```bash
+&{bar}
+{"foo":"bar"}
+```
+
 ### exec (sync)
 ---
 
@@ -1388,8 +1452,94 @@ $ curl http://localhost:8080
 hello world
 ```
 
+### env vars
+---
+
+#### Node.js
+
+```node
+const key = process.env['API_KEY']
+
+console.log(key)
+```
+
+Output
+
+```bash
+$ API_KEY=foobar node examples/env_vars.js
+foobar
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	key := os.Getenv("API_KEY")
+
+	fmt.Println(key)
+}
+```
+
+Output
+
+```bash
+$ API_KEY=foobar go run examples/env_vars.go
+foobar
+```
+
+### cli args
+---
+
+#### Node.js
+
+```node
+const args = process.argv.slice(2)
+
+console.log(args)
+```
+
+Output
+
+```bash
+$ node examples/cli_args.js foo bar qux
+[ 'foo', 'bar', 'qux' ]
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	args := os.Args[1:]
+	fmt.Println(args)
+}
+```
+
+Output
+
+```bash
+$ go run examples/cli_args.go foo bar qux
+[foo bar qux]
+```
+
 
 <!--
+### title
+---
+
 #### Node.js
 
 ```node
