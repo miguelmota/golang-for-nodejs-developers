@@ -15,6 +15,7 @@
     - ["this"](#classes)
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
+  - [http server](#http-server)
 - [License](#license)
 
 ## Examples
@@ -401,7 +402,7 @@ hello world
 const http = require('http')
 
 function handler(request, response) {
-  response.writeHead(200, { 'Content-type':'text/plan' })
+  response.writeHead(200, { 'Content-type':'text/plain' })
   response.write('hello world')
   response.end()
 }

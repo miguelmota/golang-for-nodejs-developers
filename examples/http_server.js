@@ -1,7 +1,7 @@
 const http = require('http')
 
 function handler(request, response) {
-  response.writeHead(200, { 'Content-type':'text/plan' })
+  response.writeHead(200, { 'Content-type':'text/plain' })
   response.write('hello world')
   response.end()
 }
