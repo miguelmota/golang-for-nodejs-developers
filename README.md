@@ -2,6 +2,8 @@
 
 > [Node.js](https://nodejs.org/) vs [Golang](https://golang.org/) examples
 
+This guide full of examples is intended for people learning Go that are coming from Node.js, although the vice versa can work too. This is not meant to be a complete guide and it is assumbed that you've gone through the [Tour of Go](https://tour.golang.org/). This guide is meant to be barely good enough to help you at a high level understand how to do X in Y and doing further research on your own is of course required.
+
 ## Contents
 
 - [Examples](#examples)
@@ -10,7 +12,7 @@
   - [arrays](#arrays)
     - [slice](#arrays)
     - [copy](#arrays)
-    - [concat](#arrays)
+    - [append](#arrays)
   - [uint8 arrays](#uint8-arrays)
   - [classes](#classes)
     - [constructors](#classes)
@@ -96,7 +98,7 @@ hello 5 worlds
 ### arrays
 ---
 
-Examples of slicing, copying, and concatenating arrays
+Examples of slicing, copying, and appending arrays.
 
 #### Node.js
 
@@ -227,7 +229,7 @@ Output
 ### Classes
 ---
 
-Examples of classes, constructors, instantiation, and "this" keyword
+Examples of classes, constructors, instantiation, and "this" keyword.
 
 #### Node.js
 
