@@ -5,6 +5,7 @@
 ## Contents
 
 - [Examples](#examples)
+  - [comments](#comments)
   - [print](#print)
   - [arrays](#arrays)
   - [uint8 arrays](#uint8-arrays)
@@ -17,6 +18,35 @@
 - [License](#license)
 
 ## Examples
+
+All sample code is available in [examples/](examples/)
+
+### Comments
+---
+
+#### Node.js
+
+```node
+// this is a line comment
+
+/*
+ this is a block comment
+*/
+```
+
+#### Go
+
+```go
+package main
+
+func main() {
+	// this is a line comment
+
+	/*
+	   this is a block comment
+	*/
+}
+```
 
 ### Print
 ---
@@ -47,7 +77,7 @@ import "fmt"
 func main() {
 	fmt.Println("hello world")
 	fmt.Printf("hello %s\n", "world")
-	fmt.Printf("hello %d %s", 5, "worlds")
+	fmt.Printf("hello %d %s\n", 5, "worlds")
 }
 ```
 
@@ -362,6 +392,60 @@ Output
 hello world
 ```
 
+### http server
+---
+
+#### Node.js
+
+```node
+const http = require('http')
+
+function handler(request, response) {
+  response.writeHead(200, { 'Content-type':'text/plan' })
+  response.write('hello world')
+  response.end()
+}
+
+const server = http.createServer(handler)
+server.listen(8080)
+```
+
+Output
+
+```bash
+$ curl http://localhost:8080
+hello world
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"net/http"
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(200)
+	w.Write([]byte("hello world"))
+}
+
+func main() {
+	http.HandleFunc("/", handler)
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		panic(err)
+	}
+}
+```
+
+Output
+
+```bash
+$ curl http://localhost:8080
+hello world
+```
+
 
 <!--
 #### Node.js
@@ -385,6 +469,6 @@ Output
 ```
 -->
 
-# License
+## License
 
 [MIT](LICENSE)
