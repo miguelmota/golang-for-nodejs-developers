@@ -8,7 +8,7 @@ This guide full of examples is intended for people learning Go that are coming f
 
 - [Examples](#examples)
   - [comments](#comments)
-  - [print](#print)
+  - [printing](#printing)
   - [if/else](#ifelse)
     - [ternary](#ifelse)
   - [for](#for)
@@ -29,12 +29,13 @@ This guide full of examples is intended for people learning Go that are coming f
     - [big endian](#buffers)
     - [little endian](#buffers)
     - [hex](#buffers)
+    - [compare](#buffers)
     - [equals](#buffers)
   - [maps](#maps)
   - [objects](#objects)
   - [destructuring](#destructuring)
-  - [spread](#spread)
-  - [rest](#rest)
+  - [spread operator](#spread-operator)
+  - [rest operator](#rest-operator)
   - [classes](#classes)
     - [constructors](#classes)
     - [instantiation](#classes)
@@ -57,7 +58,9 @@ This guide full of examples is intended for people learning Go that are coming f
     - [uint](#big-numbers)
     - [string](#big-numbers)
     - [hex](#big-numbers)
-    - [bytes](#big-numbers)
+    - [buffers](#big-numbers)
+    - [compare](#buffers)
+    - [equals](#buffers)
   <!--
   - [async/await](#async-await)
   - [try/catch](#try-catch)
@@ -91,7 +94,7 @@ This guide full of examples is intended for people learning Go that are coming f
 
 All sample code is available in [examples/](examples/)
 
-### Comments
+### comments
 ---
 
 #### Node.js
@@ -118,7 +121,7 @@ func main() {
 }
 ```
 
-### Print
+### printing
 ---
 
 #### Node.js
@@ -976,7 +979,7 @@ Output
 foo bar
 ```
 
-### spread
+### spread operator
 ---
 
 #### Node.js
@@ -1018,7 +1021,7 @@ Output
 1 2 3 4 5
 ```
 
-### rest
+### rest operator
 ---
 
 #### Node.js
@@ -1489,7 +1492,7 @@ Output
 ### big numbers
 ---
 
-Examples of creating big number types from and to uint, string, hex, and bytes.
+Examples of creating big number types from and to uint, string, hex, and buffers.
 
 #### Node.js
 
@@ -1512,6 +1515,7 @@ bn = new BN(Buffer.from('4b', 'hex'))
 console.log(bn.toString(10))
 console.log(bn.toNumber(10))
 console.log(bn.toString('hex'))
+console.log(bn.toBuffer())
 
 let bn2 = new BN(5)
 let isEqual = bn.cmp(bn2) == 0
@@ -1532,6 +1536,7 @@ Output
 75
 75
 4b
+<Buffer 4b>
 false
 true
 ```
@@ -1569,6 +1574,7 @@ func main() {
 	fmt.Println(bn.String())
 	fmt.Println(bn.Uint64())
 	fmt.Println(hex.EncodeToString(bn.Bytes()))
+	fmt.Println(bn.Bytes())
 
 	bn2 := big.NewInt(5)
 	isEqual := bn.Cmp(bn2) == 0
@@ -1590,6 +1596,7 @@ Output
 75
 75
 4b
+[75]
 false
 true
 ```

@@ -16,6 +16,7 @@ bn = new BN(Buffer.from('4b', 'hex'))
 console.log(bn.toString(10))
 console.log(bn.toNumber(10))
 console.log(bn.toString('hex'))
+console.log(bn.toBuffer())
 
 let bn2 = new BN(5)
 let isEqual = bn.cmp(bn2) == 0

@@ -28,6 +28,7 @@ func main() {
 	fmt.Println(bn.String())
 	fmt.Println(bn.Uint64())
 	fmt.Println(hex.EncodeToString(bn.Bytes()))
+	fmt.Println(bn.Bytes())
 
 	bn2 := big.NewInt(5)
 	isEqual := bn.Cmp(bn2) == 0
