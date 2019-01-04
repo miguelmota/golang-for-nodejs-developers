@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"math/big"
+	"reflect"
 )
 
 func writeUIntBE(buffer []byte, value, offset, byteLength int64) {
@@ -51,4 +52,10 @@ func main() {
 	writeUIntLE(buf2, 0x1234567890ab, 0, 6)
 
 	fmt.Println(hex.EncodeToString(buf2))
+
+	isEqual := reflect.DeepEqual(buf, buf2)
+	fmt.Println(isEqual)
+
+	isEqual = reflect.DeepEqual(buf, buf)
+	fmt.Println(isEqual)
 }

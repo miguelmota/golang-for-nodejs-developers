@@ -19,3 +19,9 @@ buf2.writeUIntLE(value, offset, byteLength)
 
 hexstr = buf2.toString('hex')
 console.log(hexstr)
+
+let isEqual = Buffer.compare(buf, buf2) === 0
+console.log(isEqual)
+
+isEqual = Buffer.compare(buf, buf) === 0
+console.log(isEqual)

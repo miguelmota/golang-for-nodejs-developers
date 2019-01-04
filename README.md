@@ -29,6 +29,7 @@ This guide full of examples is intended for people learning Go that are coming f
     - [big endian](#buffers)
     - [little endian](#buffers)
     - [hex](#buffers)
+    - [equals](#buffers)
   - [maps](#maps)
   - [objects](#objects)
   - [destructuring](#destructuring)
@@ -40,9 +41,7 @@ This guide full of examples is intended for people learning Go that are coming f
     - ["this"](#classes)
   - [timeout](#timeout)
   - [interval](#interval)
-  <!--
   - [IIFE](#iife)
-  -->
   <!--
   - [files](#files)
     - [creating](#files)
@@ -59,12 +58,32 @@ This guide full of examples is intended for people learning Go that are coming f
   - [big numbers](#big-numbers)
   - [async/await](#async-await)
   - [try/catch](#try-catch)
+  - [concurrency](#concurrency)
+  - [message passing](#message-passing)
+  - [event emitter](#event-emitter)
+  - [first-class functions](#first-class-functions)
+  - [errors](#errors)
   -->
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
+  <!--
+  - [tcp server](#tcp-server)
+  -->
   - [http server](#http-server)
+  - [url parse](#url-parse)
+  <!--
+  - [gzip](#gzip)
+  - [dns](#dns)
+  - [stdin](#stdin)
+  -->
   - [env vars](#env-vars)
   - [cli args](#cli-args)
+  - [modules](#modules)
+  <!--
+  - [stack trace](#stack-trace)
+  - [tty](#tty)
+  - [crypto](#crypto)
+  -->
 - [License](#license)
 
 ## Examples
@@ -643,7 +662,7 @@ Output
 ### buffers
 ---
 
-Examples of how to allocate a buffer, write in big or little endian format, and encode to a hex string.
+Examples of how to allocate a buffer, write in big or little endian format, encode to a hex string, and check if buffers are equal.
 
 #### Node.js
 
@@ -669,6 +688,12 @@ buf2.writeUIntLE(value, offset, byteLength)
 
 hexstr = buf2.toString('hex')
 console.log(hexstr)
+
+let isEqual = Buffer.compare(buf, buf2) === 0
+console.log(isEqual)
+
+isEqual = Buffer.compare(buf, buf) === 0
+console.log(isEqual)
 ```
 
 Output
@@ -676,6 +701,8 @@ Output
 ```bash
 1234567890ab
 ab9078563412
+false
+true
 ```
 
 #### Go
@@ -690,6 +717,7 @@ import (
 	"fmt"
 	"log"
 	"math/big"
+	"reflect"
 )
 
 func writeUIntBE(buffer []byte, value, offset, byteLength int64) {
@@ -725,15 +753,21 @@ func writeUIntLE(buffer []byte, value, offset, byteLength int64) {
 }
 
 func main() {
-		buf := make([]byte, 6)
-		writeUIntBE(buf, 0x1234567890ab, 0, 6)
+	buf := make([]byte, 6)
+	writeUIntBE(buf, 0x1234567890ab, 0, 6)
 
-		fmt.Println(hex.EncodeToString(buf))
+	fmt.Println(hex.EncodeToString(buf))
 
-		buf2 := make([]byte, 6)
-		writeUIntLE(buf2, 0x1234567890ab, 0, 6)
+	buf2 := make([]byte, 6)
+	writeUIntLE(buf2, 0x1234567890ab, 0, 6)
 
-		fmt.Println(hex.EncodeToString(buf2))
+	fmt.Println(hex.EncodeToString(buf2))
+
+	isEqual := reflect.DeepEqual(buf, buf2)
+	fmt.Println(isEqual)
+
+	isEqual = reflect.DeepEqual(buf, buf)
+	fmt.Println(isEqual)
 }
 ```
 
@@ -742,6 +776,8 @@ Output
 ```bash
 1234567890ab
 ab9078563412
+false
+true
 ```
 
 ### maps
@@ -1238,10 +1274,49 @@ called 2
 called 3
 ```
 
+### IIFE
+---
+
+Immediately invoked function expression
+
+#### Node.js
+
+```node
+(function(name) {
+  console.log('hello', name)
+})('bob')
+```
+
+Output
+
+```bash
+hello bob
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	func(name string) {
+		fmt.Println("hello", name)
+	}("bob")
+}
+```
+
+Output
+
+```bash
+hello bob
+```
+
 ### json
 ---
 
-Examples of how to parse JSON and stringify (marshal).
+Examples of how to parse and stringify (marshal) JSON.
 
 #### Node.js
 
@@ -1452,6 +1527,75 @@ $ curl http://localhost:8080
 hello world
 ```
 
+### url parse
+---
+
+#### Node.js
+
+```node
+const url = require('url')
+const qs = require('querystring')
+
+const urlstr = 'http://bob:secret@sub.example.com:8080/somepath?foo=bar'
+
+const parsed = url.parse(urlstr)
+console.log(parsed.protocol)
+console.log(parsed.auth)
+console.log(parsed.port)
+console.log(parsed.hostname)
+console.log(parsed.pathname)
+console.log(qs.parse(parsed.search.substr(1)))
+```
+
+Output
+
+```bash
+http:
+bob:secret
+8080
+sub.example.com
+/somepath
+{ foo: 'bar' }
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	urlstr := "http://bob:secret@sub.example.com:8080/somepath?foo=bar"
+
+	u, err := url.Parse(urlstr)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(u.Scheme)
+	fmt.Println(u.User)
+	fmt.Println(u.Port())
+	fmt.Println(u.Hostname())
+	fmt.Println(u.Path)
+	fmt.Println(u.Query())
+}
+```
+
+Output
+
+```bash
+http
+bob:secret
+8080
+sub.example.com
+/somepath
+map[foo:[bar]]
+```
+
 ### env vars
 ---
 
@@ -1535,6 +1679,60 @@ $ go run examples/cli_args.go foo bar qux
 [foo bar qux]
 ```
 
+### modules
+---
+
+#### Node.js
+
+```node
+const moment = require('moment')
+
+const now = moment().unix()
+console.log(now)
+```
+
+Output
+
+```bash
+1546595748
+```
+
+Setup
+
+```bash
+npm init
+npm install moment --save
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/go-shadow/moment"
+)
+
+func main() {
+	now := moment.New().Now().Unix()
+	fmt.Println(now)
+}
+```
+
+Output
+
+```bash
+1546595748
+```
+
+Setup
+
+```bash
+go mod init
+go mod vendor
+```
 
 <!--
 ### title
