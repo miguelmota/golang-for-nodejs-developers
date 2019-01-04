@@ -42,15 +42,14 @@ This guide full of examples is intended for people learning Go that are coming f
   - [timeout](#timeout)
   - [interval](#interval)
   - [IIFE](#iife)
-  <!--
   - [files](#files)
     - [creating](#files)
     - [opening](#files)
-    - [reading](#files)
     - [writing](#files)
+    - [reading](#files)
     - [closing](#files)
+    - [deleting](#files)
     - [file descriptors](#files)
-  -->
   - [json](#json)
     - [parse](#json)
     - [stringify](#json)
@@ -1309,6 +1308,116 @@ Output
 
 ```bash
 hello bob
+```
+
+### files
+---
+
+Examples of creating, opening, writing, reading, closing, and deleting files.
+
+#### Node.js
+
+```node
+const fs = require('fs')
+
+// create file
+fs.closeSync(fs.openSync('test.txt', 'w'))
+
+// open file (returns file descriptor)
+const fd = fs.openSync('test.txt', 'r+')
+
+let wbuf = Buffer.from('hello world.')
+let rbuf = Buffer.alloc(12)
+let off = 0
+let len = 12
+let pos = 0
+
+// write file
+fs.writeSync(fd, wbuf, pos)
+
+// read file
+fs.readSync(fd, rbuf, off, len, pos)
+
+console.log(rbuf.toString())
+
+// close file
+fs.closeSync(fd)
+
+// delete file
+fs.unlinkSync('test.txt')
+```
+
+Output
+
+```bash
+hello world.
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+	"syscall"
+)
+
+func main() {
+	// create file
+	file, err := os.Create("test.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	// close file
+	file.Close()
+
+	// open file
+	file, err = os.OpenFile("test.txt", os.O_RDWR, 0755)
+	if err != nil {
+		panic(err)
+	}
+
+	// file descriptor
+	fd := file.Fd()
+
+	// open file (using file descriptor)
+	file = os.NewFile(fd, "test file")
+
+	wbuf := []byte("hello world.")
+	rbuf := make([]byte, 12)
+	var off int64
+
+	// write file
+	if _, err := file.WriteAt(wbuf, off); err != nil {
+		panic(err)
+	}
+
+	// read file
+	if _, err := file.ReadAt(rbuf, off); err != nil {
+		panic(err)
+	}
+
+	fmt.Println(string(rbuf))
+
+	// close file (using file descriptor)
+	if err := syscall.Close(int(fd)); err != nil {
+		panic(err)
+	}
+
+	// delete file
+	if err := os.Remove("test.txt"); err != nil {
+		panic(err)
+	}
+}
+```
+
+Output
+
+```bash
+hello world.
 ```
 
 ### json
