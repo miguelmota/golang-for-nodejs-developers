@@ -66,9 +66,7 @@ This guide full of examples is intended for people learning Go that are coming f
   -->
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
-  <!--
   - [tcp server](#tcp-server)
-  -->
   - [http server](#http-server)
   - [url parse](#url-parse)
   <!--
@@ -1471,6 +1469,81 @@ Output
 
 ```bash
 hello world
+```
+
+### tcp server
+---
+
+#### Node.js
+
+```node
+const net = require('net')
+
+function handler(socket) {
+	socket.write('Received: ')
+	socket.pipe(socket)
+}
+
+const server = net.createServer(handler)
+server.listen(3000)
+```
+
+Output
+
+```bash
+$ echo 'hello' | nc localhost 3000
+Received: hello
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"bufio"
+	"net"
+)
+
+func handler(conn net.Conn) {
+	defer conn.Close()
+	reader := bufio.NewReader(conn)
+
+	for {
+		message, err := reader.ReadString('\n')
+		if err != nil {
+			return
+		}
+
+		conn.Write([]byte("Received: "))
+		conn.Write([]byte(message))
+	}
+}
+
+func main() {
+	listener, err := net.Listen("tcp", ":3000")
+	if err != nil {
+		panic(err)
+	}
+
+	defer listener.Close()
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			panic(err)
+		}
+
+		go handler(conn)
+	}
+}
+```
+
+Output
+
+```bash
+$ echo 'hello' | nc localhost 3000
+Received: hello
 ```
 
 ### http server
