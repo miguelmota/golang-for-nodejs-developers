@@ -53,8 +53,12 @@ This guide full of examples is intended for people learning Go that are coming f
   - [json](#json)
     - [parse](#json)
     - [stringify](#json)
-  <!--
   - [big numbers](#big-numbers)
+    - [uint](#big-numbers)
+    - [string](#big-numbers)
+    - [hex](#big-numbers)
+    - [bytes](#big-numbers)
+  <!--
   - [async/await](#async-await)
   - [try/catch](#try-catch)
   - [concurrency](#concurrency)
@@ -1480,6 +1484,114 @@ Output
 ```bash
 &{bar}
 {"foo":"bar"}
+```
+
+### big numbers
+---
+
+Examples of creating big number types from and to uint, string, hex, and bytes.
+
+#### Node.js
+
+```node
+const BN = require('bn.js')
+
+let bn = new BN(75)
+console.log(bn.toString(10))
+
+bn = new BN('75')
+console.log(bn.toString(10))
+
+bn = new BN(0x4b, 'hex')
+console.log(bn.toString(10))
+
+bn = new BN('4b', 'hex')
+console.log(bn.toString(10))
+
+bn = new BN(Buffer.from('4b', 'hex'))
+console.log(bn.toString(10))
+console.log(bn.toNumber(10))
+console.log(bn.toString('hex'))
+
+let bn2 = new BN(5)
+let isEqual = bn.cmp(bn2) == 0
+console.log(isEqual)
+
+bn2 = new BN('4b', 'hex')
+isEqual = bn.cmp(bn2) == 0
+console.log(isEqual)
+```
+
+Output
+
+```bash
+75
+75
+75
+75
+75
+75
+4b
+false
+true
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"encoding/hex"
+	"fmt"
+	"math/big"
+)
+
+func main() {
+	bn := new(big.Int)
+	bn.SetUint64(75)
+	fmt.Println(bn.String())
+
+	bn = new(big.Int)
+	bn.SetString("75", 10)
+	fmt.Println(bn.String())
+
+	bn = new(big.Int)
+	bn.SetUint64(0x4b)
+	fmt.Println(bn.String())
+
+	bn = new(big.Int)
+	bn.SetString("4b", 16)
+	fmt.Println(bn.String())
+
+	bn = new(big.Int)
+	bn.SetBytes([]byte{0x4b})
+	fmt.Println(bn.String())
+	fmt.Println(bn.Uint64())
+	fmt.Println(hex.EncodeToString(bn.Bytes()))
+
+	bn2 := big.NewInt(5)
+	isEqual := bn.Cmp(bn2) == 0
+	fmt.Println(isEqual)
+
+	bn2 = big.NewInt(75)
+	isEqual = bn.Cmp(bn2) == 0
+	fmt.Println(isEqual)
+}
+```
+
+Output
+
+```bash
+75
+75
+75
+75
+75
+75
+4b
+false
+true
 ```
 
 ### exec (sync)
