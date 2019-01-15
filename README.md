@@ -63,6 +63,8 @@ This guide full of examples is intended for people learning Go that are coming f
     - [buffers](#big-numbers)
     - [compare](#buffers)
     - [equals](#buffers)
+  - [promises](#promises)
+    - [all](#promises)
   - [async/await](#async-await)
   <!--
   - [try/catch](#try-catch)
@@ -1668,6 +1670,97 @@ Output
 [75]
 false
 true
+```
+
+### promises
+---
+
+#### Node.js
+
+```node
+function myPromise(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('resolved: ' + value)
+    }, 1e3)
+  })
+}
+
+function main() {
+  myPromise('foo').then(res => console.log(res)).catch(err => console.err(err))
+
+  Promise.all([
+    myPromise('A'),
+    myPromise('B'),
+    myPromise('C')
+  ])
+  .then(res => console.log(res))
+  .catch(err => console.error(err))
+}
+
+main()
+```
+
+Output
+
+```bash
+resolved: foo
+[ 'resolved: A', 'resolved: B', 'resolved: C' ]
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+func myPromise(value string) chan string {
+	ch := make(chan string, 1)
+	go func() {
+		time.Sleep(1 * time.Second)
+		ch <- "resolved: " + value
+	}()
+
+	return ch
+}
+
+func promiseAll(ch ...chan string) []string {
+	var wg sync.WaitGroup
+	var res []string
+	for _, c := range ch {
+		wg.Add(1)
+		res = append(res, <-c)
+		wg.Done()
+	}
+
+	wg.Wait()
+	return res
+}
+
+func main() {
+	res := <-myPromise("foo")
+	fmt.Println(res)
+
+	all := promiseAll(
+		myPromise("A"),
+		myPromise("B"),
+		myPromise("C"),
+	)
+
+	fmt.Println(all)
+}
+```
+
+Output
+
+```bash
+resolved: foo
+[resolved: A resolved: B resolved: C]
 ```
 
 ### async/await
