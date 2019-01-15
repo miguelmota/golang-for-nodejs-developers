@@ -95,13 +95,11 @@ This guide full of examples is intended for people learning Go that are coming f
     - [ip lookup](#dns)
     - [mx lookup](#dns)
     - [txt lookup](#dns)
-  <!--
-  - [stdin](#stdin)
-  -->
   - [crypto](#crypto)
     - [sha256](#crypto)
   - [env vars](#env-vars)
   - [cli args](#cli-args)
+  - [stdin](#stdin)
   - [modules](#modules)
   - [stack trace](#stack-trace)
   <!--
@@ -2545,6 +2543,64 @@ Output
 ```bash
 $ go run examples/cli_args.go foo bar qux
 [foo bar qux]
+```
+
+### stdin
+---
+
+#### Node.js
+
+```node
+const stdin = process.openStdin()
+
+process.stdout.write('Enter name: ')
+
+stdin.addListener('data', text => {
+  const name = text.toString().trim()
+  console.log('Your name is: ' + name)
+
+  process.exit(0)
+})
+```
+
+Output
+
+```bash
+Enter name: bob
+Your name is: bob
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
+
+func main() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter name: ")
+
+	text, err := reader.ReadString('\n')
+	if err != nil {
+		panic(err)
+	}
+
+	name := strings.TrimSpace(text)
+	fmt.Printf("Your name is: %s\n", name)
+}
+```
+
+Output
+
+```bash
+Enter name: bob
+Your name is: bob
 ```
 
 ### modules
