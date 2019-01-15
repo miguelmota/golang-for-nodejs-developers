@@ -9,6 +9,7 @@ This guide full of examples is intended for people learning Go that are coming f
 - [Examples](#examples)
   - [comments](#comments)
   - [printing](#printing)
+  - [variables](#variables)
   - [if/else](#ifelse)
     - [ternary](#ifelse)
   - [for](#for)
@@ -32,6 +33,7 @@ This guide full of examples is intended for people learning Go that are coming f
     - [compare](#buffers)
     - [equals](#buffers)
   - [maps](#maps)
+    - [iteration](#maps)
   - [objects](#objects)
   - [destructuring](#destructuring)
   - [spread operator](#spread-operator)
@@ -61,8 +63,8 @@ This guide full of examples is intended for people learning Go that are coming f
     - [buffers](#big-numbers)
     - [compare](#buffers)
     - [equals](#buffers)
-  <!--
   - [async/await](#async-await)
+  <!--
   - [try/catch](#try-catch)
   - [concurrency](#concurrency)
   - [message passing](#message-passing)
@@ -83,8 +85,8 @@ This guide full of examples is intended for people learning Go that are coming f
   - [env vars](#env-vars)
   - [cli args](#cli-args)
   - [modules](#modules)
-  <!--
   - [stack trace](#stack-trace)
+  <!--
   - [tty](#tty)
   - [crypto](#crypto)
   -->
@@ -160,6 +162,49 @@ Output
 hello world
 hello world
 hello 5 worlds
+```
+
+### variables
+---
+
+#### Node.js
+
+```node
+// function scoped
+var foo = 'foo'
+
+// block scoped
+let bar = 'bar'
+
+// constant
+const qux = 'qux'
+```
+
+#### Go
+
+(variables are block scoped in Go)
+
+```go
+package main
+
+func main() {
+	// explicit
+	var foo string = "foo"
+
+	// type inferred
+	var bar = "foo"
+
+	// shorthand
+	baz := "bar"
+
+	// constant
+	const qux = "qux"
+
+	_ = foo
+	_ = bar
+	_ = baz
+	_ = qux
+}
 ```
 
 ### if/else
@@ -811,6 +856,15 @@ const map2 = {}
 map2['foo'] = 'bar'
 item = map2['foo']
 delete map2['foo']
+
+const map3 = new Map()
+map3.set('foo', 100)
+map3.set('bar', 200)
+map3.set('baz', 300)
+
+for (let [key, value] of map3) {
+  console.log(key, value)
+}
 ```
 
 Output
@@ -820,6 +874,9 @@ true
 bar
 false
 undefined
+foo 100
+bar 200
+baz 300
 ```
 
 #### Go
@@ -830,19 +887,28 @@ package main
 import "fmt"
 
 func main() {
-	myMap := make(map[string]string)
+	map1 := make(map[string]string)
 
-	myMap["foo"] = "bar"
+	map1["foo"] = "bar"
 
-	item, found := myMap["foo"]
+	item, found := map1["foo"]
 	fmt.Println(found)
 	fmt.Println(item)
 
-	delete(myMap, "foo")
+	delete(map1, "foo")
 
-	item, found = myMap["foo"]
+	item, found = map1["foo"]
 	fmt.Println(found)
 	fmt.Println(item)
+
+	map2 := make(map[string]int)
+	map2["foo"] = 100
+	map2["bar"] = 200
+	map2["baz"] = 300
+
+	for key, value := range map2 {
+		fmt.Println(key, value)
+	}
 }
 ```
 
@@ -853,6 +919,9 @@ true
 bar
 false
 
+foo 100
+bar 200
+baz 300
 ```
 
 ### objects
@@ -862,16 +931,18 @@ false
 
 ```node
 const obj = {
-  someProperty: 'bar',
+  someProperties: {
+    'foo': 'bar'
+  },
   someMethod: (prop) => {
-    return obj[prop]
+    return obj.someProperties[prop]
   }
 }
 
-let item =  obj.someProperty
+let item =  obj.someProperties['foo']
 console.log(item)
 
-item = obj.someMethod('someProperty')
+item = obj.someMethod('foo')
 console.log(item)
 ```
 
@@ -890,30 +961,28 @@ package main
 import "fmt"
 
 type Obj struct {
-	SomeProperty string
+	SomeProperties map[string]string
 }
 
-func NewObj(someProperty string) *Obj {
+func NewObj() *Obj {
 	return &Obj{
-		SomeProperty: someProperty,
+		SomeProperties: map[string]string{
+			"foo": "bar",
+		},
 	}
 }
 
 func (o *Obj) SomeMethod(prop string) string {
-	if prop == "SomeProperty" {
-		return o.SomeProperty
-	}
-
-	return ""
+	return o.SomeProperties[prop]
 }
 
 func main() {
-	obj := NewObj("bar")
+	obj := NewObj()
 
-	item := obj.SomeProperty
+	item := obj.SomeProperties["foo"]
 	fmt.Println(item)
 
-	item = obj.SomeMethod("SomeProperty")
+	item = obj.SomeMethod("foo")
 	fmt.Println(item)
 }
 ```
@@ -1601,6 +1670,107 @@ false
 true
 ```
 
+### async/await
+---
+
+#### Node.js
+
+```node
+function hello(name) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (name === 'fail') {
+        reject(new Error('failed'))
+      } else {
+        resolve('hello ' + name)
+      }
+    }, 1e3)
+  })
+}
+
+async function main() {
+  try {
+    let output = await hello('bob')
+    console.log(output)
+
+    output = await hello('fail')
+    console.log(output)
+  } catch(err) {
+    console.log(err.message)
+  }
+}
+
+main()
+```
+
+Output
+
+```bash
+hello bob
+failed
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+	"time"
+)
+
+func hello(name string) chan interface{} {
+	ch := make(chan interface{}, 1)
+	go func() {
+		time.Sleep(1 * time.Second)
+		if name == "fail" {
+			ch <- errors.New("failed")
+		} else {
+			ch <- "hello " + name
+		}
+	}()
+
+	return ch
+}
+
+func await(ch chan interface{}) (string, error) {
+	res := <-ch
+	switch v := res.(type) {
+	case string:
+		return v, nil
+	case error:
+		return "", v
+	default:
+		return "", errors.New("unkown")
+	}
+}
+
+func main() {
+	result, err := await(hello("bob"))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(result)
+
+	result, err = await(hello("fail"))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(result)
+}
+```
+
+Output
+
+```bash
+hello bob
+failed
+```
+
 ### exec (sync)
 ---
 
@@ -2033,6 +2203,74 @@ Setup
 ```bash
 go mod init
 go mod vendor
+```
+
+### stack trace
+---
+
+#### Node.js
+
+```node
+function foo() {
+  console.trace(new Error('failed'))
+}
+
+foo()
+```
+
+Output
+
+```bash
+Trace: Error: failed
+    at foo (/Users/bob/examples/stack_trace.js:2:17)
+    at Object.<anonymous> (/Users/bob/examples/stack_trace.js:5:1)
+    at Module._compile (internal/modules/cjs/loader.js:688:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:699:10)
+    at Module.load (internal/modules/cjs/loader.js:598:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:537:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:529:3)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:741:12)
+    at startup (internal/bootstrap/node.js:285:19)
+    at bootstrapNodeJSCore (internal/bootstrap/node.js:739:3)
+    at foo (/Users/bob/examples/stack_trace.js:2:11)
+    at Object.<anonymous> (/Users/bob/examples/stack_trace.js:5:1)
+    at Module._compile (internal/modules/cjs/loader.js:688:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:699:10)
+    at Module.load (internal/modules/cjs/loader.js:598:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:537:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:529:3)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:741:12)
+    at startup (internal/bootstrap/node.js:285:19)
+    at bootstrapNodeJSCore (internal/bootstrap/node.js:739:3)
+```
+
+#### Go
+
+```go
+package main
+
+import "errors"
+
+func foo() {
+	panic(errors.New("failed"))
+}
+
+func main() {
+	foo()
+}
+```
+
+Output
+
+```bash
+panic: failed
+
+goroutine 1 [running]:
+main.foo(...)
+        /Users/bob/examples/stack_trace.go:6
+main.main()
+        /Users/bob/examples/stack_trace.go:10 +0x70
+exit status 2
 ```
 
 <!--

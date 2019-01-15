@@ -3,29 +3,27 @@ package main
 import "fmt"
 
 type Obj struct {
-	SomeProperty string
+	SomeProperties map[string]string
 }
 
-func NewObj(someProperty string) *Obj {
+func NewObj() *Obj {
 	return &Obj{
-		SomeProperty: someProperty,
+		SomeProperties: map[string]string{
+			"foo": "bar",
+		},
 	}
 }
 
 func (o *Obj) SomeMethod(prop string) string {
-	if prop == "SomeProperty" {
-		return o.SomeProperty
-	}
-
-	return ""
+	return o.SomeProperties[prop]
 }
 
 func main() {
-	obj := NewObj("bar")
+	obj := NewObj()
 
-	item := obj.SomeProperty
+	item := obj.SomeProperties["foo"]
 	fmt.Println(item)
 
-	item = obj.SomeMethod("SomeProperty")
+	item = obj.SomeMethod("foo")
 	fmt.Println(item)
 }

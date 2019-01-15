@@ -1,12 +1,14 @@
 const obj = {
-  someProperty: 'bar',
+  someProperties: {
+    'foo': 'bar'
+  },
   someMethod: (prop) => {
-    return obj[prop]
+    return obj.someProperties[prop]
   }
 }
 
-let item =  obj.someProperty
+let item =  obj.someProperties['foo']
 console.log(item)
 
-item = obj.someMethod('someProperty')
+item = obj.someMethod('foo')
 console.log(item)
