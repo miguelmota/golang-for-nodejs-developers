@@ -9,15 +9,19 @@ import (
 func main() {
 	data := []byte("hello world\n")
 
-	var compressed bytes.Buffer
-	w := gzip.NewWriter(&compressed)
-	w.Write(data)
-	w.Close()
+	compressed := new(bytes.Buffer)
+	w := gzip.NewWriter(compressed)
+	if _, err := w.Write(data); err != nil {
+		panic(err)
+	}
+	if err := w.Close(); err != nil {
+		panic(err)
+	}
 
 	fmt.Println(compressed.Bytes())
 
-	var decompressed bytes.Buffer
-	r, err := gzip.NewReader(&compressed)
+	decompressed := new(bytes.Buffer)
+	r, err := gzip.NewReader(compressed)
 	if err != nil {
 		panic(err)
 	}

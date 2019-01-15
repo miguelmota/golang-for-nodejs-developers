@@ -74,10 +74,15 @@ This guide full of examples is intended for people learning Go that are coming f
   - [promises](#promises)
     - [all](#promises)
   - [async/await](#async-await)
-  <!--
   - [streams](#streams)
+    - [reading](#streams)
+    - [writing](#streams)
+  <!--
+    - [transform](#streams)
   - [try/catch](#try-catch)
   - [concurrency](#concurrency)
+    - [threads](#concurrency)
+    - [forking](#concurrency)
   - [message passing](#message-passing)
   - [event emitter](#event-emitter)
   - [first-class functions](#first-class-functions)
@@ -86,6 +91,9 @@ This guide full of examples is intended for people learning Go that are coming f
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
   - [tcp server](#tcp-server)
+  <!--
+  - [udp](#udp)
+  -->
   - [http server](#http-server)
   - [url parse](#url-parse)
   - [gzip](#gzip)
@@ -103,7 +111,13 @@ This guide full of examples is intended for people learning Go that are coming f
   - [modules](#modules)
   - [stack trace](#stack-trace)
   <!--
+  - [exceptions](#exceptions)
+  (catch panic)
+  - [testing](#testing)
+    - [benchmarking](#testing)
   - [tty](#tty)
+  - [db](#db)
+    - [postgres](#postgres)
   -->
   <!--
   - [jsdoc](#jsdoc)
@@ -1881,6 +1895,103 @@ hello bob
 failed
 ```
 
+### streams
+---
+
+Examples of reading and writing streams
+
+#### Node.js
+
+```node
+const { Writable, Readable } = require('stream')
+
+const inStream = new Readable()
+
+inStream.push(Buffer.from('foo'))
+inStream.push(Buffer.from('bar'))
+inStream.push(null) // end stream
+inStream.pipe(process.stdout)
+
+const outStream = new Writable({
+  write(chunk, encoding, callback) {
+    console.log('received: ' + chunk.toString('utf8'))
+    callback()
+  }
+})
+
+outStream.write(Buffer.from('abc'))
+outStream.write(Buffer.from('xyz'))
+outStream.end()
+```
+
+Output
+
+```bash
+foobar
+received: abc
+received: xyz
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"bufio"
+	"bytes"
+	"fmt"
+	"io"
+	"os"
+)
+
+func main() {
+	inStream := new(bytes.Buffer)
+	w := bufio.NewWriter(inStream)
+	_, err := w.Write([]byte("foo"))
+	if err != nil {
+		panic(err)
+	}
+	_, err = w.Write([]byte("bar"))
+	if err != nil {
+		panic(err)
+	}
+	err = w.Flush()
+	if err != nil {
+		panic(err)
+	}
+
+	inStream.WriteTo(os.Stdout)
+	fmt.Print("\n")
+
+	outStream := new(bytes.Buffer)
+	outStream.Write([]byte("abc\n"))
+	outStream.Write([]byte("xyc\n"))
+	piper, pipew := io.Pipe()
+
+	go func() {
+		defer pipew.Close()
+		io.Copy(pipew, outStream)
+	}()
+
+	sc := bufio.NewScanner(piper)
+	for sc.Scan() {
+		fmt.Println("received: " + sc.Text())
+	}
+	if err := sc.Err(); err != nil {
+		panic(err)
+	}
+}
+```
+
+Output
+
+```bash
+foobar
+received: abc
+received: xyc
+```
+
 ### errors
 ---
 
@@ -2298,15 +2409,19 @@ import (
 func main() {
 	data := []byte("hello world\n")
 
-	var compressed bytes.Buffer
-	w := gzip.NewWriter(&compressed)
-	w.Write(data)
-	w.Close()
+	compressed := new(bytes.Buffer)
+	w := gzip.NewWriter(compressed)
+	if _, err := w.Write(data); err != nil {
+		panic(err)
+	}
+	if err := w.Close(); err != nil {
+		panic(err)
+	}
 
 	fmt.Println(compressed.Bytes())
 
-	var decompressed bytes.Buffer
-	r, err := gzip.NewReader(&compressed)
+	decompressed := new(bytes.Buffer)
+	r, err := gzip.NewReader(compressed)
 	if err != nil {
 		panic(err)
 	}
