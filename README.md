@@ -296,11 +296,9 @@ func main() {
 		fmt.Println("length is other")
 	}
 
-	var isOddLength string
+	isOddLength := "no"
 	if len(array)%2 == 1 {
 		isOddLength = "yes"
-	} else {
-		isOddLength = "no"
 	}
 
 	fmt.Println(isOddLength)
