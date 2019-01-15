@@ -81,11 +81,15 @@ This guide full of examples is intended for people learning Go that are coming f
   - [http server](#http-server)
   - [url parse](#url-parse)
   - [gzip](#gzip)
-  <!--
+    - [compress](#gzip)
+    - [decompress](#gzip)
   - [dns](#dns)
+    - [txt lookup](#dns)
+  <!--
   - [stdin](#stdin)
   -->
   - [crypto](#crypto)
+    - [sha256](#crypto)
   - [env vars](#env-vars)
   - [cli args](#cli-args)
   - [modules](#modules)
@@ -2238,6 +2242,98 @@ Output
 ```bash
 [31 139 8 0 0 0 0 0 0 255 202 72 205 201 201 87 40 207 47 202 73 225 2 4 0 0 255 255 45 59 8 175 12 0 0 0]
 hello world
+```
+
+### dns
+---
+
+TXT lookup example
+
+#### Node.js
+
+```node
+const dns = require('dns')
+
+dns.resolve4('google.com', (err, ips) => {
+  if (err) {
+    console.error(err)
+  }
+
+  console.log(ips)
+})
+
+dns.resolveMx('google.com', (err, mx) => {
+  if (err) {
+    console.error(err)
+  }
+
+  console.log(mx)
+})
+
+dns.resolveTxt('google.com', (err, txt) => {
+  if (err) {
+    console.error(err)
+  }
+
+  console.log(txt)
+})
+```
+
+Output
+
+```bash
+[ '172.217.11.78' ]
+[ { exchange: 'alt4.aspmx.l.google.com', priority: 50 },
+  { exchange: 'alt2.aspmx.l.google.com', priority: 30 },
+  { exchange: 'alt3.aspmx.l.google.com', priority: 40 },
+  { exchange: 'aspmx.l.google.com', priority: 10 },
+  { exchange: 'alt1.aspmx.l.google.com', priority: 20 } ]
+[ [ 'v=spf1 include:_spf.google.com ~all' ],
+  [ 'docusign=05958488-4752-4ef2-95eb-aa7ba8a3bd0e' ],
+  [ 'facebook-domain-verification=22rm551cu4k0ab0bxsw536tlds4h95' ],
+  [ 'globalsign-smime-dv=CDYX+XFHUw2wml6/Gb8+59BsH31KzUr6c1l2BPvqKX8=' ] ]
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"net"
+)
+
+func main() {
+	ips, err := net.LookupIP("google.com")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(ips)
+
+	mx, err := net.LookupMX("google.com")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(mx)
+
+	txt, err := net.LookupTXT("google.com")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(txt)
+}
+```
+
+Output
+
+```bash
+[172.217.5.78 2607:f8b0:4007:80d::200e]
+[0xc0000ba2e0 0xc0000ba260 0xc0000ba2a0 0xc0000ba280 0xc0000ba300]
+[facebook-domain-verification=22rm551cu4k0ab0bxsw536tlds4h95 docusign=05958488-4752-4ef2-95eb-aa7ba8a3bd0e v=spf1 include:_spf.google.com ~all globalsign-smime-dv=CDYX+XFHUw2wml6/Gb8+59BsH31KzUr6c1l2BPvqKX8=]
 ```
 
 ### crypto
