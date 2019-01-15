@@ -73,8 +73,8 @@ This guide full of examples is intended for people learning Go that are coming f
   - [message passing](#message-passing)
   - [event emitter](#event-emitter)
   - [first-class functions](#first-class-functions)
-  - [errors](#errors)
   -->
+  - [errors](#errors)
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
   - [tcp server](#tcp-server)
@@ -84,6 +84,8 @@ This guide full of examples is intended for people learning Go that are coming f
     - [compress](#gzip)
     - [decompress](#gzip)
   - [dns](#dns)
+    - [ip lookup](#dns)
+    - [mx lookup](#dns)
     - [txt lookup](#dns)
   <!--
   - [stdin](#stdin)
@@ -1868,6 +1870,78 @@ Output
 ```bash
 hello bob
 failed
+```
+
+### errors
+---
+
+#### Node.js
+
+```node
+const err1 = new Error('some error')
+
+console.log(err1)
+
+class FooError extends Error{
+  constructor(message) {
+    super(message)
+    this.name = 'FooError'
+    this.message = message
+  }
+
+  toString() {
+    return this.message
+  }
+}
+
+const err2 = new FooError('my custom error')
+
+console.log(err2)
+```
+
+Output
+
+```bash
+Error: some error
+{ FooError: my custom error }
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+type FooError struct {
+	s string
+}
+
+func (f *FooError) Error() string {
+	return f.s
+}
+
+func NewFooError(s string) error {
+	return &FooError{s}
+}
+
+func main() {
+	err1 := errors.New("some error")
+	fmt.Println(err1)
+
+	err2 := NewFooError("my custom error")
+	fmt.Println(err2)
+}
+```
+
+Output
+
+```bash
+some error
+my custom error
 ```
 
 ### exec (sync)
