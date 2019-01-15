@@ -67,6 +67,7 @@ This guide full of examples is intended for people learning Go that are coming f
     - [all](#promises)
   - [async/await](#async-await)
   <!--
+  - [streams](#streams)
   - [try/catch](#try-catch)
   - [concurrency](#concurrency)
   - [message passing](#message-passing)
@@ -79,8 +80,8 @@ This guide full of examples is intended for people learning Go that are coming f
   - [tcp server](#tcp-server)
   - [http server](#http-server)
   - [url parse](#url-parse)
-  <!--
   - [gzip](#gzip)
+  <!--
   - [dns](#dns)
   - [stdin](#stdin)
   -->
@@ -1502,7 +1503,7 @@ hello world.
 ### json
 ---
 
-Examples of how to parse and stringify (marshal) JSON.
+Examples of how to parse (unmarshal) and stringify (marshal) JSON.
 
 #### Node.js
 
@@ -2159,6 +2160,84 @@ bob:secret
 sub.example.com
 /somepath
 map[foo:[bar]]
+```
+
+### gzip
+---
+
+#### Node.js
+
+```node
+const zlib = require('zlib')
+
+const data = Buffer.from('hello world', 'utf-8')
+
+zlib.gzip(data, (err, compressed) => {
+  if (err) {
+    console.error(err)
+  }
+
+  console.log(compressed)
+
+  zlib.unzip(compressed, (err, decompressed) => {
+    if (err) {
+      console.error(err)
+    }
+
+    console.log(decompressed.toString())
+  })
+})
+
+```
+
+Output
+
+```bash
+<Buffer 1f 8b 08 00 00 00 00 00 00 13 cb 48 cd c9 c9 57 28 cf 2f ca 49 01 00 85 11 4a 0d 0b 00 00 00>
+hello world
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"bytes"
+	"compress/gzip"
+	"fmt"
+)
+
+func main() {
+	data := []byte("hello world\n")
+
+	var compressed bytes.Buffer
+	w := gzip.NewWriter(&compressed)
+	w.Write(data)
+	w.Close()
+
+	fmt.Println(compressed.Bytes())
+
+	var decompressed bytes.Buffer
+	r, err := gzip.NewReader(&compressed)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = decompressed.ReadFrom(r)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(string(decompressed.Bytes()))
+}
+```
+
+Output
+
+```bash
+[31 139 8 0 0 0 0 0 0 255 202 72 205 201 201 87 40 207 47 202 73 225 2 4 0 0 255 255 45 59 8 175 12 0 0 0]
+hello world
 ```
 
 ### crypto
