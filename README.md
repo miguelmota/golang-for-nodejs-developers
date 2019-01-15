@@ -1,3 +1,11 @@
+<h1 align="center">
+  <br />
+  <img src="https://user-images.githubusercontent.com/168240/51193345-801fa380-189d-11e9-92ef-2101bf6a24ed.png" alt="logo" width="700" />
+  <br />
+  <br />
+  <br />
+</h1>
+
 # Golang for Node.js Developers
 
 > Examples of [Golang](https://golang.org/) examples compared to [Node.js](https://nodejs.org/) for learning
@@ -98,6 +106,9 @@ This guide full of examples is intended for people learning Go that are coming f
   - [stack trace](#stack-trace)
   <!--
   - [tty](#tty)
+  -->
+  <!--
+  - [jsdoc](#jsdoc)
   -->
 - [License](#license)
 
