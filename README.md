@@ -84,13 +84,13 @@ This guide full of examples is intended for people learning Go that are coming f
   - [dns](#dns)
   - [stdin](#stdin)
   -->
+  - [crypto](#crypto)
   - [env vars](#env-vars)
   - [cli args](#cli-args)
   - [modules](#modules)
   - [stack trace](#stack-trace)
   <!--
   - [tty](#tty)
-  - [crypto](#crypto)
   -->
 - [License](#license)
 
@@ -799,6 +799,7 @@ func writeUIntLE(buffer []byte, value, offset, byteLength int64) {
 	for i := range valBytes {
 		tmp[i] = valBytes[len(valBytes)-1-i]
 	}
+
 	copy(slice, tmp)
 	copy(buffer[offset:], slice)
 }
@@ -2158,6 +2159,49 @@ bob:secret
 sub.example.com
 /somepath
 map[foo:[bar]]
+```
+
+### crypto
+---
+
+#### Node.js
+
+```node
+const crypto = require('crypto')
+
+const hash = crypto.createHash('sha256').update(Buffer.from('hello')).digest()
+
+console.log(hash.toString('hex'))
+```
+
+Output
+
+```bash
+2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
+)
+
+func main() {
+	hash := sha256.Sum256([]byte("hello"))
+
+	fmt.Println(hex.EncodeToString(hash[:]))
+}
+```
+
+Output
+
+```bash
+2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
 ```
 
 ### env vars
