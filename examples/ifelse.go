@@ -17,6 +17,7 @@ func main() {
 		fmt.Println("length is other")
 	}
 
+	// closest thing to ternary operator
 	isOddLength := "no"
 	if len(array)%2 == 1 {
 		isOddLength = "yes"

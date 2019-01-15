@@ -274,8 +274,6 @@ no
 
 #### Go
 
-(there is no ternary operator in Go)
-
 ```go
 package main
 
@@ -296,6 +294,7 @@ func main() {
 		fmt.Println("length is other")
 	}
 
+	// closest thing to ternary operator
 	isOddLength := "no"
 	if len(array)%2 == 1 {
 		isOddLength = "yes"
@@ -1215,7 +1214,7 @@ qux
 
 #### Go
 
-(closest thing to a class)
+(closest thing to a class is to use a structure)
 
 ```go
 package main
@@ -1739,6 +1738,8 @@ resolved: foo
 
 #### Go
 
+(closest thing is to use channels)
+
 ```go
 package main
 
@@ -1834,6 +1835,8 @@ failed
 
 #### Go
 
+(closest thing is to use channels)
+
 ```go
 package main
 
@@ -1901,7 +1904,7 @@ Examples of reading and writing streams
 #### Node.js
 
 ```node
-const { Writable, Readable } = require('stream')
+const { Readable, Writable } = require('stream')
 
 const inStream = new Readable()
 

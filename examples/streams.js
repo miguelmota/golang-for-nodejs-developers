@@ -1,4 +1,4 @@
-const { Writable, Readable } = require('stream')
+const { Readable, Writable } = require('stream')
 
 const inStream = new Readable()
 
