@@ -725,7 +725,7 @@ func main() {
 	var reduced []string
 	for i, value := range array {
 		if i%2 == 0 {
-			reduced = append(filtered, strings.ToUpper(value))
+			reduced = append(reduced, strings.ToUpper(value))
 		}
 	}
 
@@ -741,7 +741,7 @@ Output
 2 c
 [A B C]
 [a c]
-[a c C]
+[a C]
 ```
 
 ### buffers

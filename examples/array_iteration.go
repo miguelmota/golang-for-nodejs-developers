@@ -31,7 +31,7 @@ func main() {
 	var reduced []string
 	for i, value := range array {
 		if i%2 == 0 {
-			reduced = append(filtered, strings.ToUpper(value))
+			reduced = append(reduced, strings.ToUpper(value))
 		}
 	}
 
