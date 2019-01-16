@@ -18,6 +18,17 @@ This guide full of examples is intended for people learning Go that are coming f
   - [comments](#comments)
   - [printing](#printing)
   - [variables](#variables)
+  <!--
+    - [types](#types)
+      - [int](#types)
+      - [float](#types)
+      - [bool](#types)
+      - [string](#types)
+      - [array](#types)
+      - [object](#types)
+      - [function](#types)
+  - [interpolation](#interpolation)
+  -->
   - [if/else](#ifelse)
     - [ternary](#ifelse)
   - [for](#for)
@@ -51,6 +62,12 @@ This guide full of examples is intended for people learning Go that are coming f
     - [constructors](#classes)
     - [instantiation](#classes)
     - ["this"](#classes)
+  <!--
+  - [generators](#generators)
+  -->
+  <!--
+  - [datetime](#datetime)
+  -->
   - [timeout](#timeout)
   - [interval](#interval)
   - [IIFE](#iife)
@@ -87,8 +104,12 @@ This guide full of examples is intended for people learning Go that are coming f
   - [message passing](#message-passing)
   - [event emitter](#event-emitter)
   - [first-class functions](#first-class-functions)
+  - [default values](#default-values)
   -->
   - [errors](#errors)
+  <!--
+  - [regex](#regex)
+  -->
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
   - [tcp server](#tcp-server)
@@ -2882,18 +2903,23 @@ go mod vendor
 
 ```node
 function foo() {
-  console.trace(new Error('failed'))
+  throw new Error('failed')
 }
 
-foo()
+try {
+  foo()
+} catch(err) {
+  console.trace(err)
+}
+
 ```
 
 Output
 
 ```bash
 Trace: Error: failed
-    at foo (/Users/bob/examples/stack_trace.js:2:17)
-    at Object.<anonymous> (/Users/bob/examples/stack_trace.js:5:1)
+    at foo (/Users/bob/examples/stack_trace.js:2:9)
+    at Object.<anonymous> (/Users/bob/examples/stack_trace.js:6:3)
     at Module._compile (internal/modules/cjs/loader.js:688:30)
     at Object.Module._extensions..js (internal/modules/cjs/loader.js:699:10)
     at Module.load (internal/modules/cjs/loader.js:598:32)
@@ -2902,8 +2928,7 @@ Trace: Error: failed
     at Function.Module.runMain (internal/modules/cjs/loader.js:741:12)
     at startup (internal/bootstrap/node.js:285:19)
     at bootstrapNodeJSCore (internal/bootstrap/node.js:739:3)
-    at foo (/Users/bob/examples/stack_trace.js:2:11)
-    at Object.<anonymous> (/Users/bob/examples/stack_trace.js:5:1)
+    at Object.<anonymous> (/Users/bob/examples/stack_trace.js:8:11)
     at Module._compile (internal/modules/cjs/loader.js:688:30)
     at Object.Module._extensions..js (internal/modules/cjs/loader.js:699:10)
     at Module.load (internal/modules/cjs/loader.js:598:32)
@@ -2919,13 +2944,23 @@ Trace: Error: failed
 ```go
 package main
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+	"runtime/debug"
+)
 
 func foo() {
 	panic(errors.New("failed"))
 }
 
 func main() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println(string(debug.Stack()))
+		}
+	}()
+
 	foo()
 }
 ```
@@ -2933,14 +2968,17 @@ func main() {
 Output
 
 ```bash
-panic: failed
-
 goroutine 1 [running]:
+runtime/debug.Stack(0xc000090eb8, 0x10a8400, 0xc00007e1c0)
+        /Users/mota/.gvm/gos/go1.11/src/runtime/debug/stack.go:24 +0xa7
+main.main.func1()
+        /Users/bob/examples/stack_trace.go:16 +0x46
+panic(0x10a8400, 0xc00007e1c0)
+        /Users/mota/.gvm/gos/go1.11/src/runtime/panic.go:513 +0x1b9
 main.foo(...)
-        /Users/bob/examples/stack_trace.go:6
+        /Users/bob/examples/stack_trace.go:10
 main.main()
-        /Users/bob/examples/stack_trace.go:10 +0x70
-exit status 2
+        /Users/bob/examples/stack_trace.go:20 +0xa2
 ```
 
 <!--

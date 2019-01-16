@@ -1,5 +1,10 @@
 function foo() {
-  console.trace(new Error('failed'))
+  throw new Error('failed')
 }
 
-foo()
+try {
+  foo()
+} catch(err) {
+  console.trace(err)
+}
+
