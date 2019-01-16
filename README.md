@@ -115,6 +115,7 @@ This guide full of examples is intended for people learning Go that are coming f
   - [testing](#testing)
     - [benchmarking](#testing)
   - [tty](#tty)
+  - [cli flags](#cli-flags)
   - [db](#db)
     - [postgres](#postgres)
   -->
@@ -1073,8 +1074,12 @@ func main() {
 		Value: "bar",
 	}
 
-	key, value := obj.Read()
+	// option 1: multiple variable assignment
+	key, value := obj.Key, obj.Value
+	fmt.Println(key, value)
 
+	// option 2: return multiple values from a function
+	key, value = obj.Read()
 	fmt.Println(key, value)
 }
 ```
@@ -1082,6 +1087,7 @@ func main() {
 Output
 
 ```bash
+foo bar
 foo bar
 ```
 

@@ -17,7 +17,11 @@ func main() {
 		Value: "bar",
 	}
 
-	key, value := obj.Read()
+	// option 1: multiple variable assignment
+	key, value := obj.Key, obj.Value
+	fmt.Println(key, value)
 
+	// option 2: return multiple values from a function
+	key, value = obj.Read()
 	fmt.Println(key, value)
 }
