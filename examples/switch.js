@@ -1,4 +1,4 @@
-const value = 'c'
+const value = 'b'
 
 switch(value) {
   case 'a':

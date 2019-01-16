@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	value := "c"
+	value := "b"
 
 	switch value {
 	case "a":

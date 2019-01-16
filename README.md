@@ -484,7 +484,7 @@ Output
 #### Node.js
 
 ```node
-const value = 'c'
+const value = 'b'
 
 switch(value) {
   case 'a':
@@ -515,7 +515,8 @@ switch(value) {
 Output
 
 ```bash
-C
+B
+B - falling through
 C - falling through
 second default
 ```
@@ -528,7 +529,7 @@ package main
 import "fmt"
 
 func main() {
-	value := "c"
+	value := "b"
 
 	switch value {
 	case "a":
@@ -560,7 +561,8 @@ func main() {
 Output
 
 ```bash
-C
+B
+B - falling through
 C - falling through
 second default
 ```
