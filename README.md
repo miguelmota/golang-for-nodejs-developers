@@ -91,9 +91,7 @@ This guide full of examples is intended for people learning Go that are coming f
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
   - [tcp server](#tcp-server)
-  <!--
-  - [udp](#udp)
-  -->
+  - [udp server](#udp-server)
   - [http server](#http-server)
   - [url parse](#url-parse)
   - [gzip](#gzip)
@@ -1761,11 +1759,13 @@ func myPromise(value string) chan string {
 
 func promiseAll(ch ...chan string) []string {
 	var wg sync.WaitGroup
-	var res []string
-	for _, c := range ch {
+	res := make([]string, len(ch))
+	for i, c := range ch {
 		wg.Add(1)
-		res = append(res, <-c)
-		wg.Done()
+		go func(j int, s chan string) {
+			res[j] = <-s
+			wg.Done()
+		}(i, c)
 	}
 
 	wg.Wait()
@@ -1944,6 +1944,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 )
 
 func main() {
@@ -1971,17 +1972,23 @@ func main() {
 	piper, pipew := io.Pipe()
 
 	go func() {
+		sc := bufio.NewScanner(piper)
+		for sc.Scan() {
+			fmt.Println("received: " + sc.Text())
+		}
+		if err := sc.Err(); err != nil {
+			panic(err)
+		}
+
+		os.Exit(0)
+	}()
+
+	go func() {
 		defer pipew.Close()
 		io.Copy(pipew, outStream)
 	}()
 
-	sc := bufio.NewScanner(piper)
-	for sc.Scan() {
-		fmt.Println("received: " + sc.Text())
-	}
-	if err := sc.Err(); err != nil {
-		panic(err)
-	}
+	defer runtime.Goexit()
 }
 ```
 
@@ -2236,6 +2243,87 @@ Output
 ```bash
 $ echo 'hello' | nc localhost 3000
 Received: hello
+```
+
+### udp server
+---
+
+#### Node.js
+
+```node
+const dgram = require('dgram')
+const server = dgram.createSocket('udp4')
+
+server.on('error', err => {
+  console.error(err)
+  server.close()
+})
+
+server.on('message', (msg, rinfo) => {
+  const data = msg.toString('utf8').trim()
+  console.log(`received: ${data} from ${rinfo.address}:${rinfo.port}`)
+})
+
+server.on('listening', () => {
+  const address = server.address()
+  console.log(`server listening ${address.address}:${address.port}`)
+})
+
+server.bind(3000)
+```
+
+Output
+
+```bash
+$ echo 'hello world' > /dev/udp/0.0.0.0/3000
+
+server listening 0.0.0.0:3000
+received: hello world from 127.0.0.1:51452
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"net"
+	"strings"
+)
+
+func main() {
+	conn, err := net.ListenUDP("udp", &net.UDPAddr{
+		Port: 3000,
+		IP:   net.ParseIP("0.0.0.0"),
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	defer conn.Close()
+	fmt.Printf("server listening %s\n", conn.LocalAddr().String())
+
+	for {
+		message := make([]byte, 20)
+		rlen, remote, err := conn.ReadFromUDP(message[:])
+		if err != nil {
+			panic(err)
+		}
+
+		data := strings.TrimSpace(string(message[:rlen]))
+		fmt.Printf("received: %s from %s\n", data, remote)
+	}
+}
+```
+
+Output
+
+```bash
+$ echo 'hello world' > /dev/udp/0.0.0.0/3000
+
+server listening [::]:3000
+received: hello world from 127.0.0.1:50275
 ```
 
 ### http server

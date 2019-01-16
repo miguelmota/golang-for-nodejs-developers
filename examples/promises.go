@@ -18,11 +18,13 @@ func myPromise(value string) chan string {
 
 func promiseAll(ch ...chan string) []string {
 	var wg sync.WaitGroup
-	var res []string
-	for _, c := range ch {
+	res := make([]string, len(ch))
+	for i, c := range ch {
 		wg.Add(1)
-		res = append(res, <-c)
-		wg.Done()
+		go func(j int, s chan string) {
+			res[j] = <-s
+			wg.Done()
+		}(i, c)
 	}
 
 	wg.Wait()

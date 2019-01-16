@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 )
 
 func main() {
@@ -33,15 +34,21 @@ func main() {
 	piper, pipew := io.Pipe()
 
 	go func() {
+		sc := bufio.NewScanner(piper)
+		for sc.Scan() {
+			fmt.Println("received: " + sc.Text())
+		}
+		if err := sc.Err(); err != nil {
+			panic(err)
+		}
+
+		os.Exit(0)
+	}()
+
+	go func() {
 		defer pipew.Close()
 		io.Copy(pipew, outStream)
 	}()
 
-	sc := bufio.NewScanner(piper)
-	for sc.Scan() {
-		fmt.Println("received: " + sc.Text())
-	}
-	if err := sc.Err(); err != nil {
-		panic(err)
-	}
+	defer runtime.Goexit()
 }
