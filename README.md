@@ -1052,8 +1052,6 @@ foo bar
 
 #### Go
 
-(closest thing to destructuring is using multiple return values)
-
 ```go
 package main
 
