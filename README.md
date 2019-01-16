@@ -27,6 +27,7 @@ This guide full of examples is intended for people learning Go that are coming f
     - [slicing](#arrays)
     - [copying](#arrays)
     - [appending](#arrays)
+    - [prepending](#arrays)
   - [uint8 arrays](#uint8-arrays)
   - [array iteration](#array-iteration)
     - [looping](#array-iteration)
@@ -504,7 +505,7 @@ default
 ### arrays
 ---
 
-Examples of slicing, copying, and appending arrays.
+Examples of slicing, copying, appending, and prepending arrays.
 
 #### Node.js
 
@@ -520,6 +521,9 @@ console.log(sub)
 
 const concatenated = clone.concat([6, 7])
 console.log(concatenated)
+
+const prepended = [-2,-1,0].concat(concatenated)
+console.log(prepended)
 ```
 
 Output
@@ -529,6 +533,7 @@ Output
 [ 1, 2, 3, 4, 5 ]
 [ 3, 4 ]
 [ 1, 2, 3, 4, 5, 6, 7 ]
+[ -2, -1, 0, 1, 2, 3, 4, 5, 6, 7 ]
 ```
 
 #### Go
@@ -539,18 +544,21 @@ package main
 import "fmt"
 
 func main() {
-	array := []byte{1, 2, 3, 4, 5}
+	array := []int{1, 2, 3, 4, 5}
 	fmt.Println(array)
 
-	clone := make([]byte, len(array))
+	clone := make([]int, len(array))
 	copy(clone, array)
 	fmt.Println(clone)
 
 	sub := array[2:4]
 	fmt.Println(sub)
 
-	concatenated := append(array, []byte{6, 7}...)
+	concatenated := append(array, []int{6, 7}...)
 	fmt.Println(concatenated)
+
+	prepended := append([]int{-2, -1, 0}, concatenated...)
+	fmt.Println(prepended)
 }
 ```
 
@@ -561,6 +569,7 @@ Output
 [1 2 3 4 5]
 [3 4]
 [1 2 3 4 5 6 7]
+[-2 -1 0 1 2 3 4 5 6 7]
 ```
 
 ### uint8 arrays
@@ -2496,7 +2505,7 @@ import (
 )
 
 func main() {
-	data := []byte("hello world\n")
+	data := []byte("hello world")
 
 	compressed := new(bytes.Buffer)
 	w := gzip.NewWriter(compressed)
@@ -2527,7 +2536,7 @@ func main() {
 Output
 
 ```bash
-[31 139 8 0 0 0 0 0 0 255 202 72 205 201 201 87 40 207 47 202 73 225 2 4 0 0 255 255 45 59 8 175 12 0 0 0]
+[31 139 8 0 0 0 0 0 0 255 202 72 205 201 201 87 40 207 47 202 73 1 4 0 0 255 255 133 17 74 13 11 0 0 0]
 hello world
 ```
 

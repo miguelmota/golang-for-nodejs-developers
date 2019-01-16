@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	data := []byte("hello world\n")
+	data := []byte("hello world")
 
 	compressed := new(bytes.Buffer)
 	w := gzip.NewWriter(compressed)

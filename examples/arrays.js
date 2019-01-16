@@ -9,3 +9,6 @@ console.log(sub)
 
 const concatenated = clone.concat([6, 7])
 console.log(concatenated)
+
+const prepended = [-2,-1,0].concat(concatenated)
+console.log(prepended)
