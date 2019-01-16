@@ -27,8 +27,8 @@ This guide full of examples is intended for people learning Go that are coming f
       - [array](#types)
       - [object](#types)
       - [function](#types)
-  - [interpolation](#interpolation)
   -->
+  - [interpolation](#interpolation)
   - [if/else](#ifelse)
     - [ternary](#ifelse)
   - [for](#for)
@@ -258,6 +258,47 @@ func main() {
 	_ = baz
 	_ = qux
 }
+```
+
+### interpolation
+---
+
+#### Node.js
+
+```node
+const name = 'bob'
+const age = 21
+const message = `${name} is ${age} years old`
+
+console.log(message)
+```
+
+Output
+
+```bash
+bob is 21 years old
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	name := "bob"
+	age := 21
+	message := fmt.Sprintf("%s is %d years old", name, age)
+
+	fmt.Println(message)
+}
+```
+
+Output
+
+```bash
+bob is 21 years old
 ```
 
 ### if/else
