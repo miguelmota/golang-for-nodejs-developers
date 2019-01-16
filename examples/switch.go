@@ -13,7 +13,7 @@ func main() {
 	case "c":
 		fmt.Println("C")
 	default:
-		fmt.Println("default")
+		fmt.Println("first default")
 	}
 
 	switch value {
@@ -27,6 +27,6 @@ func main() {
 		fmt.Println("C - falling through")
 		fallthrough
 	default:
-		fmt.Println("default")
+		fmt.Println("second default")
 	}
 }

@@ -11,7 +11,7 @@ switch(value) {
     console.log('C')
     break
   default:
-    console.log('default')
+    console.log('first default')
 }
 
 switch(value) {
@@ -22,5 +22,5 @@ switch(value) {
   case 'c':
     console.log('C - falling through')
   default:
-    console.log('default')
+    console.log('second default')
 }

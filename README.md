@@ -497,7 +497,7 @@ switch(value) {
     console.log('C')
     break
   default:
-    console.log('default')
+    console.log('first default')
 }
 
 switch(value) {
@@ -508,7 +508,7 @@ switch(value) {
   case 'c':
     console.log('C - falling through')
   default:
-    console.log('default')
+    console.log('second default')
 }
 ```
 
@@ -517,7 +517,7 @@ Output
 ```bash
 C
 C - falling through
-default
+second default
 ```
 
 #### Go
@@ -538,7 +538,7 @@ func main() {
 	case "c":
 		fmt.Println("C")
 	default:
-		fmt.Println("default")
+		fmt.Println("first default")
 	}
 
 	switch value {
@@ -552,7 +552,7 @@ func main() {
 		fmt.Println("C - falling through")
 		fallthrough
 	default:
-		fmt.Println("default")
+		fmt.Println("second default")
 	}
 }
 ```
@@ -562,7 +562,7 @@ Output
 ```bash
 C
 C - falling through
-default
+second default
 ```
 
 ### arrays
