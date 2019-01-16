@@ -806,7 +806,7 @@ Output
 2 c
 [A B C]
 [a c]
-[a C]
+[A C]
 ```
 
 ### buffers
