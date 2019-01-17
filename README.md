@@ -126,6 +126,8 @@ This guide full of examples is intended for people learning Go that are coming f
     - [sha256](#crypto)
   - [env vars](#env-vars)
   - [cli args](#cli-args)
+  - [stdout](#stdout)
+  - [stderr](#stderr)
   - [stdin](#stdin)
   - [modules](#modules)
   - [stack trace](#stack-trace)
@@ -3101,6 +3103,78 @@ Output
 ```bash
 $ go run examples/cli_args.go foo bar qux
 [foo bar qux]
+```
+
+### stdout
+---
+
+#### Node.js
+
+```node
+process.stdout.write('hello world\n')
+```
+
+Output
+
+```bash
+hello world
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	fmt.Fprint(os.Stdout, "hello world\n")
+}
+```
+
+Output
+
+```bash
+hello world
+```
+
+### stderr
+---
+
+#### Node.js
+
+```node
+process.stderr.write('hello error\n')
+```
+
+Output
+
+```bash
+hello error
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	fmt.Fprint(os.Stdout, "hello error\n")
+}
+```
+
+Output
+
+```bash
+hello error
 ```
 
 ### stdin
