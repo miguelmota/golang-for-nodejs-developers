@@ -28,7 +28,7 @@ func await(ch chan interface{}) (string, error) {
 	case error:
 		return "", v
 	default:
-		return "", errors.New("unkown")
+		return "", errors.New("unknown")
 	}
 }
 
