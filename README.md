@@ -63,9 +63,7 @@ This guide full of examples is intended for people learning Go that are coming f
   <!--
   - [generators](#generators)
   -->
-  <!--
   - [datetime](#datetime)
-  -->
   - [timeout](#timeout)
   - [interval](#interval)
   - [IIFE](#iife)
@@ -1531,6 +1529,71 @@ Output
 ```bash
 bar
 qux
+```
+
+### datetime
+---
+
+#### Node.js
+
+```node
+const nowUnix = Date.now()
+console.log(nowUnix)
+
+const datestr = '2019-01-17T09:24:23+00:00'
+const date = new Date(datestr)
+console.log(date.getTime())
+console.log(date.toString())
+
+const futureDate = new Date(date)
+futureDate.setDate(date.getDate()+14)
+console.log(futureDate.toString())
+```
+
+Output
+
+```bash
+1547718844168
+1547717063000
+Thu Jan 17 2019 01:24:23 GMT-0800 (Pacific Standard Time)
+Thu Jan 31 2019 01:24:23 GMT-0800 (Pacific Standard Time)
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	nowUnix := time.Now().Unix()
+	fmt.Println(nowUnix)
+
+	datestr := "2019-01-17T09:24:23+00:00"
+	date, err := time.Parse("2006-01-02T15:04:05Z07:00", datestr)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(date.Unix())
+	fmt.Println(date.String())
+
+	futureDate := date.AddDate(0, 0, 14)
+	fmt.Println(futureDate.String())
+}
+```
+
+Output
+
+```bash
+1547718844
+1547717063
+2019-01-17 09:24:23 +0000 +0000
+2019-01-31 09:24:23 +0000 +0000
 ```
 
 ### timeout
