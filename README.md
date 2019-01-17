@@ -64,6 +64,9 @@ This guide full of examples is intended for people learning Go that are coming f
   - [generators](#generators)
   -->
   - [datetime](#datetime)
+    - [parsing](#datetime)
+    - [formatting](#datetime)
+    - [unix timestamp](#datetime)
   - [timeout](#timeout)
   - [interval](#interval)
   - [IIFE](#iife)
@@ -1534,6 +1537,8 @@ qux
 ### datetime
 ---
 
+Examples of parsing, formatting, and getting unix timestamp of dates.
+
 #### Node.js
 
 ```node
@@ -1548,6 +1553,9 @@ console.log(date.toString())
 const futureDate = new Date(date)
 futureDate.setDate(date.getDate()+14)
 console.log(futureDate.toString())
+
+const formatted = `${String(date.getMonth()+1).padStart(2, 0)}/${String(date.getDate()).padStart(2, 0)}/${date.getFullYear()}`
+console.log(formatted)
 ```
 
 Output
@@ -1557,6 +1565,7 @@ Output
 1547717063000
 Thu Jan 17 2019 01:24:23 GMT-0800 (Pacific Standard Time)
 Thu Jan 31 2019 01:24:23 GMT-0800 (Pacific Standard Time)
+01/17/2019
 ```
 
 #### Go
@@ -1584,6 +1593,9 @@ func main() {
 
 	futureDate := date.AddDate(0, 0, 14)
 	fmt.Println(futureDate.String())
+
+	formatted := date.Format("01/02/2006")
+	fmt.Println(formatted)
 }
 ```
 
@@ -1594,6 +1606,7 @@ Output
 1547717063
 2019-01-17 09:24:23 +0000 +0000
 2019-01-31 09:24:23 +0000 +0000
+01/17/2019
 ```
 
 ### timeout

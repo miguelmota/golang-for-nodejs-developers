@@ -9,3 +9,6 @@ console.log(date.toString())
 const futureDate = new Date(date)
 futureDate.setDate(date.getDate()+14)
 console.log(futureDate.toString())
+
+const formatted = `${String(date.getMonth()+1).padStart(2, 0)}/${String(date.getDate()).padStart(2, 0)}/${date.getFullYear()}`
+console.log(formatted)

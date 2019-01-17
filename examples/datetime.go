@@ -20,4 +20,7 @@ func main() {
 
 	futureDate := date.AddDate(0, 0, 14)
 	fmt.Println(futureDate.String())
+
+	formatted := date.Format("01/02/2006")
+	fmt.Println(formatted)
 }
