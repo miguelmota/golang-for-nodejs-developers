@@ -8,7 +8,7 @@ const myUndefined = undefined
 
 // object types
 const myObject = {}
-const myAray = []
+const myArray = []
 const myFunction = function() {}
 const myError = new Error('error')
 const myDate = new Date()
