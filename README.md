@@ -358,7 +358,7 @@ func main() {
 }
 ```
 
-### type checks
+### type check
 ---
 
 #### Node.js
