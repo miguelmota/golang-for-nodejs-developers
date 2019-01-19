@@ -53,6 +53,8 @@ This guide full of examples is intended for people learning Go that are coming f
   - [maps](#maps)
     - [iteration](#maps)
   - [objects](#objects)
+  - [functions](#functions)
+  - [default values](#default-values)
   - [destructuring](#destructuring)
   - [spread operator](#spread-operator)
   - [rest operator](#rest-operator)
@@ -103,7 +105,6 @@ This guide full of examples is intended for people learning Go that are coming f
   - [message passing](#message-passing)
   - [event emitter](#event-emitter)
   - [first-class functions](#first-class-functions)
-  - [default values](#default-values)
   -->
   - [errors](#errors)
   <!--
@@ -1298,6 +1299,108 @@ Output
 ```bash
 bar
 bar
+```
+
+### functions
+---
+
+#### Node.js
+
+```node
+function add(a, b) {
+  return a + b
+}
+
+const x = add(2,3)
+console.log(x)
+```
+
+Output
+
+```bash
+5
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func add(a int, b int) int {
+	return a + b
+}
+
+func main() {
+	x := add(2, 3)
+	fmt.Println(x)
+}
+```
+
+Output
+
+```bash
+5
+```
+
+### default values
+---
+
+#### Node.js
+
+```node
+function greet(name = 'stranger') {
+  return `hello ${name}`
+}
+
+let message = greet()
+console.log(message)
+
+message = greet('bob')
+console.log(message)
+```
+
+Output
+
+```bash
+hello stranger
+hello bob
+```
+
+#### Go
+
+use pointers and check for nil to know if explicitly left blank
+
+```go
+package main
+
+import "fmt"
+
+func greet(name *string) string {
+	n := "stranger"
+	if name != nil {
+		n = *name
+	}
+
+	return fmt.Sprintf("hello %s", n)
+}
+
+func main() {
+	message := greet(nil)
+	fmt.Println(message)
+
+	name := "bob"
+	message = greet(&name)
+	fmt.Println(message)
+}
+```
+
+Output
+
+```bash
+hello stranger
+hello bob
 ```
 
 ### destructuring
