@@ -7,6 +7,6 @@ func add(a int, b int) int {
 }
 
 func main() {
-	x := add(2, 3)
-	fmt.Println(x)
+	result := add(2, 3)
+	fmt.Println(result)
 }

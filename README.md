@@ -1311,8 +1311,8 @@ function add(a, b) {
   return a + b
 }
 
-const x = add(2,3)
-console.log(x)
+const result = add(2,3)
+console.log(result)
 ```
 
 Output
@@ -1333,8 +1333,8 @@ func add(a int, b int) int {
 }
 
 func main() {
-	x := add(2, 3)
-	fmt.Println(x)
+	result := add(2, 3)
+	fmt.Println(result)
 }
 ```
 
