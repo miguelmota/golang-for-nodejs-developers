@@ -62,9 +62,7 @@ This guide full of examples is intended for people learning Go that are coming f
     - [constructors](#classes)
     - [instantiation](#classes)
     - ["this"](#classes)
-  <!--
   - [generators](#generators)
-  -->
   - [datetime](#datetime)
     - [parsing](#datetime)
     - [formatting](#datetime)
@@ -1637,6 +1635,93 @@ Output
 ```bash
 bar
 qux
+```
+
+### generators
+---
+
+#### Node.js
+
+```node
+function *generator() {
+  yield 'hello'
+  yield 'world'
+}
+
+let gen = generator()
+
+while (true) {
+  let { value, done } = gen.next()
+  console.log(value, done)
+
+  if (done) {
+    break
+  }
+}
+
+// alternatively
+for (let value of generator()) {
+  console.log(value)
+}
+```
+
+Output
+
+```bash
+hello false
+world false
+undefined true
+hello
+world
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func Generator() chan string {
+	c := make(chan string)
+
+	go func() {
+		c <- "hello"
+		c <- "world"
+
+		close(c)
+	}()
+
+	return c
+}
+
+func main() {
+	gen := Generator()
+
+	for true {
+		value, more := <-gen
+		fmt.Println(value, more)
+
+		if !more {
+			break
+		}
+	}
+
+	// alternatively
+	for value := range Generator() {
+		fmt.Println(value)
+	}
+}
+```
+
+Output
+
+```bash
+hello true
+world true
+ false
+hello
+world
 ```
 
 ### datetime
