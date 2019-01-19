@@ -123,6 +123,7 @@ This guide full of examples is intended for people learning Go that are coming f
     - [sha256](#crypto)
   - [env vars](#env-vars)
   - [cli args](#cli-args)
+  - [cli flags](#cli-flags)
   - [stdout](#stdout)
   - [stderr](#stderr)
   - [stdin](#stdin)
@@ -134,7 +135,6 @@ This guide full of examples is intended for people learning Go that are coming f
   - [testing](#testing)
     - [benchmarking](#testing)
   - [tty](#tty)
-  - [cli flags](#cli-flags)
   - [db](#db)
     - [postgres](#postgres)
   - [jsdoc](#jsdoc)
@@ -3348,6 +3348,59 @@ Output
 ```bash
 $ go run examples/cli_args.go foo bar qux
 [foo bar qux]
+```
+
+### cli flags
+---
+
+#### Node.js
+
+```node
+const yargs = require('yargs')
+
+const { foo, qux }= yargs.argv
+console.log('foo:', foo)
+console.log('qux:', qux)
+```
+
+Output
+
+```bash
+$ node examples/cli_flags.js --foo='bar' --qux=true
+foo: bar
+qux: true
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"flag"
+	"fmt"
+)
+
+func main() {
+	var foo string
+	flag.StringVar(&foo, "foo", "default value", "a string var")
+
+	var qux bool
+	flag.BoolVar(&qux, "qux", false, "a bool var")
+
+	flag.Parse()
+
+	fmt.Println("foo:", foo)
+	fmt.Println("qux:", qux)
+}
+```
+
+Output
+
+```bash
+$ go run examples/cli_flags.go -foo='bar' -qux=true
+foo: bar
+qux: true
 ```
 
 ### stdout
