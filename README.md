@@ -129,11 +129,11 @@ This guide full of examples is intended for people learning Go that are coming f
   - [stdin](#stdin)
   - [modules](#modules)
   - [stack trace](#stack-trace)
+  - [testing](#testing)
   <!--
   - [exceptions](#exceptions)
   (catch panic)
-  - [testing](#testing)
-    - [benchmarking](#testing)
+  - [benchmarking](#benchmarking)
   - [tty](#tty)
   - [db](#db)
     - [postgres](#postgres)
@@ -3671,6 +3671,100 @@ main.foo(...)
         /Users/bob/examples/stack_trace.go:10
 main.main()
         /Users/bob/examples/stack_trace.go:20 +0xa2
+```
+
+### testing
+---
+
+#### Node.js
+
+```node
+const test = require('tape')
+
+test(t => {
+  const tt = [
+		{a:1, b:1, ret:2},
+		{a:2, b:3, ret:5},
+		{a:5, b:5, ret:10}
+  ]
+
+  t.plan(tt.length)
+
+  tt.forEach(tt => {
+    t.equal(sum(tt.a, tt.b), tt.ret)
+  })
+})
+
+function sum(a, b) {
+	return a + b
+}
+```
+
+Output
+
+```bash
+$ node examples/example_test.js
+TAP version 13
+# (anonymous)
+ok 1 should be equal
+ok 2 should be equal
+ok 3 should be equal
+
+1..3
+# tests 3
+# pass  3
+
+# ok
+```
+
+#### Go
+
+```go
+package example
+
+import (
+	"fmt"
+	"testing"
+)
+
+func TestSum(t *testing.T) {
+	for _, tt := range []struct {
+		a   int
+		b   int
+		ret int
+	}{
+		{1, 1, 2},
+		{2, 3, 5},
+		{5, 5, 10},
+	} {
+		t.Run(fmt.Sprintf("(%v + %v)", tt.a, tt.b), func(t *testing.T) {
+			ret := sum(tt.a, tt.b)
+			if ret != tt.ret {
+				t.Errorf("want %v, got %v", tt.ret, ret)
+			}
+		})
+	}
+}
+
+func sum(a, b int) int {
+	return a + b
+}
+```
+
+Output
+
+```bash
+$ go test -v examples/example_test.go
+=== RUN   TestSum
+=== RUN   TestSum/(1_+_1)
+=== RUN   TestSum/(2_+_3)
+=== RUN   TestSum/(5_+_5)
+--- PASS: TestSum (0.00s)
+    --- PASS: TestSum/(1_+_1) (0.00s)
+    --- PASS: TestSum/(2_+_3) (0.00s)
+    --- PASS: TestSum/(5_+_5) (0.00s)
+PASS
+ok      command-line-arguments  0.008s
 ```
 
 <!--
