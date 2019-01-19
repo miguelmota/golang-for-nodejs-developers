@@ -105,9 +105,7 @@ This guide full of examples is intended for people learning Go that are coming f
   - [first-class functions](#first-class-functions)
   -->
   - [errors](#errors)
-  <!--
   - [regex](#regex)
-  -->
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
   - [tcp server](#tcp-server)
@@ -139,8 +137,6 @@ This guide full of examples is intended for people learning Go that are coming f
   - [cli flags](#cli-flags)
   - [db](#db)
     - [postgres](#postgres)
-  -->
-  <!--
   - [jsdoc](#jsdoc)
   -->
 - [License](#license)
@@ -2614,6 +2610,67 @@ Output
 ```bash
 some error
 my custom error
+```
+
+### regex
+---
+
+#### Node.js
+
+```node
+let input = 'foobar'
+let replaced = input.replace(/foo(.*)/i, 'qux$1')
+console.log(replaced)
+
+let match = /o{2}/i.test(input)
+console.log(match)
+
+input = '111-222-333'
+let matches = input.match(/([0-9]+)/gi)
+console.log(matches)
+```
+
+Output
+
+```bash
+quxbar
+true
+[ '111', '222', '333' ]
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"regexp"
+)
+
+func main() {
+	input := "foobar"
+	re := regexp.MustCompile(`(?i)foo(.*)`)
+	replaced := re.ReplaceAllString(input, "qux$1")
+	fmt.Println(replaced)
+
+	re = regexp.MustCompile(`(?i)o{2}`)
+	match := re.Match([]byte(input))
+	fmt.Println(match)
+
+	input = "111-222-333"
+	re = regexp.MustCompile(`(?i)([0-9]+)`)
+	matches := re.FindAllString(input, -1)
+	fmt.Println(matches)
+}
+```
+
+Output
+
+```bash
+quxbar
+true
+[111 222 333]
 ```
 
 ### exec (sync)
