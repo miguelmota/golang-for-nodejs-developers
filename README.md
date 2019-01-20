@@ -1,10 +1,10 @@
-<h1 align="center">
+<h3 align="center">
   <br />
   <img src="https://user-images.githubusercontent.com/168240/51193345-801fa380-189d-11e9-92ef-2101bf6a24ed.png" alt="logo" width="700" />
   <br />
   <br />
   <br />
-</h1>
+</h3>
 
 # Golang for Node.js Developers
 
@@ -130,10 +130,10 @@ This guide full of examples is intended for people learning Go that are coming f
   - [modules](#modules)
   - [stack trace](#stack-trace)
   - [testing](#testing)
+  - [benchmarking](#benchmarking)
   <!--
   - [exceptions](#exceptions)
   (catch panic)
-  - [benchmarking](#benchmarking)
   - [tty](#tty)
   - [db](#db)
     - [postgres](#postgres)
@@ -3765,6 +3765,109 @@ $ go test -v examples/example_test.go
     --- PASS: TestSum/(5_+_5) (0.00s)
 PASS
 ok      command-line-arguments  0.008s
+```
+
+### benchmarking
+---
+
+#### Node.js
+
+```node
+const Benchmark = require('benchmark')
+
+const suite = new Benchmark.Suite
+suite.add('fib#recursion', () => {
+  fibRec(10)
+})
+.add('fib#loop', () => {
+  fibLoop(10)
+})
+.on('complete', () => {
+  console.log(suite[0].toString())
+  console.log(suite[1].toString())
+})
+.run({
+  async: true
+})
+
+function fibRec(n) {
+  if (n <= 1) {
+    return n
+  }
+
+  return fibRec(n-1) + fibRec(n-2)
+}
+
+function fibLoop(n) {
+  let f = [0, 1]
+  for (let i = 2; i <= n; i++) {
+    f[i] = f[i-1] + f[i-2]
+  }
+  return f[n]
+}
+```
+
+Output
+
+```bash
+$ node examples/benchmark_test.js
+fib#recursion x 1,343,074 ops/sec ±1.26% (84 runs sampled)
+fib#loop x 20,104,517 ops/sec ±3.78% (78 runs sampled)
+```
+
+#### Go
+
+```go
+package example
+
+import (
+	"testing"
+)
+
+func BenchmarkFibRec(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		fibRec(10)
+	}
+}
+
+func BenchmarkFibLoop(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		fibLoop(10)
+	}
+}
+
+func fibRec(n int) int {
+	if n <= 1 {
+		return n
+	}
+
+	return fibRec(n-1) + fibRec(n-2)
+}
+
+func fibLoop(n int) int {
+	f := make([]int, n+1, n+2)
+	if n < 2 {
+		f = f[0:2]
+	}
+	f[0] = 0
+	f[1] = 1
+	for i := 2; i <= n; i++ {
+		f[i] = f[i-1] + f[i-2]
+	}
+	return f[n]
+}
+```
+
+Output
+
+```bash
+$ go test -v -bench=. -benchmem examples/benchmark_test.go
+goos: darwin
+goarch: amd64
+BenchmarkFibRec-8        5000000               340 ns/op               0 B/op          0 allocs/op
+BenchmarkFibLoop-8      30000000                46.5 ns/op            96 B/op          1 allocs/op
+PASS
+ok      command-line-arguments  3.502s
 ```
 
 <!--
