@@ -3900,7 +3900,11 @@ Output
 
 ## Contributing
 
-Pull requests are welcome! Please submit a pull request for new interesting additions or for general content fixes. If updating code, update both the README and the code in the [examples](examples/) folder.
+Pull requests are welcome!
+
+Please submit a pull request for new interesting additions or for general content fixes.
+
+If updating code, update both the README and the code in the [examples](examples/) folder.
 
 ## License
 
