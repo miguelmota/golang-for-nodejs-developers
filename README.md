@@ -92,6 +92,7 @@ This guide full of examples is intended for people learning Go that are coming f
     - [compare](#buffers)
     - [equals](#buffers)
   - [promises](#promises)
+    - [then](#promises)
     - [all](#promises)
   - [async/await](#async-await)
   - [streams](#streams)
