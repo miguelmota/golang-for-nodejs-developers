@@ -60,6 +60,7 @@ This guide full of examples is intended for people learning Go that are coming f
   - [destructuring](#destructuring)
   - [spread operator](#spread-operator)
   - [rest operator](#rest-operator)
+  - [swapping](#swapping)
   - [classes](#classes)
     - [constructors](#classes)
     - [instantiation](#classes)
@@ -1570,6 +1571,55 @@ Output
 
 ```bash
 15
+```
+
+### swapping
+---
+
+#### Node.js
+
+```node
+let a = 'foo'
+let b = 'bar'
+
+console.log(a, b);
+
+[b, a] = [a, b]
+
+console.log(a, b)
+```
+
+Output
+
+```bash
+foo bar
+bar foo
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	a := "foo"
+	b := "bar"
+
+	fmt.Println(a, b)
+
+	b, a = a, b
+
+	fmt.Println(a, b)
+}
+```
+
+Output
+
+```bash
+foo bar
+bar foo
 ```
 
 ### classes
