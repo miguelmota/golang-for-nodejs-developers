@@ -97,13 +97,13 @@ This guide full of examples is intended for people learning Go that are coming f
   - [streams](#streams)
     - [reading](#streams)
     - [writing](#streams)
+  - [event emitter](#event-emitter)
   <!--
     - [transform](#streams)
   - [concurrency](#concurrency)
     - [threads](#concurrency)
     - [forking](#concurrency)
   - [message passing](#message-passing)
-  - [event emitter](#event-emitter)
   - [first-class functions](#first-class-functions)
   -->
   - [errors](#errors)
@@ -136,7 +136,6 @@ This guide full of examples is intended for people learning Go that are coming f
   - [testing](#testing)
   - [benchmarking](#benchmarking)
   <!--
-  - [tty](#tty)
   - [db](#db)
     - [postgres](#postgres)
   - [jsdoc](#jsdoc)
@@ -2610,6 +2609,101 @@ Output
 foobar
 received: abc
 received: xyc
+```
+
+### event emitter
+---
+
+#### Node.js
+
+```node
+const EventEmitter = require('events')
+class MyEmitter extends EventEmitter {}
+const myEmitter = new MyEmitter()
+
+myEmitter.on('my-event', msg => {
+  console.log(msg)
+})
+
+myEmitter.on('my-other-event', msg => {
+  console.log(msg)
+})
+
+myEmitter.emit('my-event', 'hello world')
+myEmitter.emit('my-other-event', 'hello other world')
+```
+
+Output
+
+```bash
+hello world
+hello other world
+```
+
+#### Go
+
+(closest thing is to use channels)
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+type MyEmitter map[string]chan string
+
+func main() {
+	myEmitter := MyEmitter{}
+	myEmitter["my-event"] = make(chan string)
+	myEmitter["my-other-event"] = make(chan string)
+
+	go func() {
+		for {
+			select {
+			case msg := <-myEmitter["my-event"]:
+				fmt.Println(msg)
+			case msg := <-myEmitter["my-other-event"]:
+				fmt.Println(msg)
+			}
+		}
+	}()
+
+	myEmitter["my-event"] <- "hello world"
+	myEmitter["my-other-event"] <- "hello other world"
+}
+```
+
+Output
+
+```bash
+package main
+
+import (
+	"fmt"
+)
+
+type MyEmitter map[string]chan string
+
+func main() {
+	myEmitter := MyEmitter{}
+	myEmitter["my-event"] = make(chan string)
+	myEmitter["my-other-event"] = make(chan string)
+
+	go func() {
+		for {
+			select {
+			case msg := <-myEmitter["my-event"]:
+				fmt.Println(msg)
+			case msg := <-myEmitter["my-other-event"]:
+				fmt.Println(msg)
+			}
+		}
+	}()
+
+	myEmitter["my-event"] <- "hello world"
+	myEmitter["my-other-event"] <- "hello other world"
+}
 ```
 
 ### errors
