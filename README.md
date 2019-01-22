@@ -98,7 +98,6 @@ This guide full of examples is intended for people learning Go that are coming f
     - [writing](#streams)
   <!--
     - [transform](#streams)
-  - [try/catch](#try-catch)
   - [concurrency](#concurrency)
     - [threads](#concurrency)
     - [forking](#concurrency)
@@ -107,6 +106,8 @@ This guide full of examples is intended for people learning Go that are coming f
   - [first-class functions](#first-class-functions)
   -->
   - [errors](#errors)
+  - [try/catch](#try-catch)
+  - [exceptions](#exceptions)
   - [regex](#regex)
   - [exec (sync)](#exec-sync)
   - [exec (async)](#exec-async)
@@ -134,8 +135,6 @@ This guide full of examples is intended for people learning Go that are coming f
   - [testing](#testing)
   - [benchmarking](#benchmarking)
   <!--
-  - [exceptions](#exceptions)
-  (catch panic)
   - [tty](#tty)
   - [db](#db)
     - [postgres](#postgres)
@@ -859,6 +858,13 @@ console.log(sub)
 const sub2 = array.subarray(2,4)
 console.log(sub2)
 
+console.log(array)
+const value = 9
+const start = 5
+const end = 10
+array.fill(value, start, end)
+console.log(array)
+
 console.log(array.byteLength)
 ```
 
@@ -869,6 +875,8 @@ Uint8Array [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
 Uint8Array [ 0, 1, 2, 3, 0, 0, 0, 0, 0, 0 ]
 Uint8Array [ 2, 3, 0, 0, 0, 0, 0, 0 ]
 Uint8Array [ 2, 3 ]
+Uint8Array [ 0, 1, 2, 3, 0, 0, 0, 0, 0, 0 ]
+Uint8Array [ 0, 1, 2, 3, 0, 9, 9, 9, 9, 9 ]
 10
 ```
 
@@ -894,6 +902,15 @@ func main() {
 	sub2 := array[2:4]
 	fmt.Println(sub2)
 
+	fmt.Println(array)
+	value := uint8(9)
+	start := 5
+	end := 10
+	for i := start; i < end; i++ {
+		array[i] = value
+	}
+	fmt.Println(array)
+
 	fmt.Println(len(array))
 }
 ```
@@ -905,6 +922,8 @@ Output
 [0 1 2 3 0 0 0 0 0 0]
 [2 3 0 0 0 0 0 0]
 [2 3]
+[0 1 2 3 0 0 0 0 0 0]
+[0 1 2 3 0 9 9 9 9 9]
 10
 ```
 
@@ -2613,6 +2632,125 @@ Output
 ```bash
 some error
 my custom error
+```
+
+### try/catch
+---
+
+#### Node.js
+
+```node
+function foo(fail) {
+  if (fail) {
+    throw Error('my error')
+  }
+}
+
+function main() {
+  try {
+    foo(true)
+  } catch(err) {
+    console.log(`caught error: ${err.message}`)
+  }
+}
+
+main()
+```
+
+Output
+
+```bash
+caught error: my error
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+func foo(fail bool) error {
+	if fail {
+		return errors.New("my error")
+	}
+
+	return nil
+}
+
+func main() {
+	err := foo(true)
+	if err != nil {
+		fmt.Printf("caught error: %s\n", err.Error())
+	}
+}
+```
+
+Output
+
+```bash
+caught error: my error
+```
+
+### exceptions
+---
+
+#### Node.js
+
+```node
+function foo() {
+  throw Error('my exception')
+}
+
+function main() {
+  foo()
+}
+
+process.on('uncaughtException', err => {
+  console.log(`caught exception: ${err.message}`)
+  process.exit(1)
+})
+
+main()
+```
+
+Output
+
+```bash
+caught exception: my exception
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func foo() {
+	panic("my exception")
+}
+
+func main() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("caught exception: %s", r)
+		}
+	}()
+
+	foo()
+}
+```
+
+Output
+
+```bash
+caught exception: my exception
 ```
 
 ### regex

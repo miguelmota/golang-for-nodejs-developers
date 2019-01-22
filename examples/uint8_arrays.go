@@ -17,5 +17,14 @@ func main() {
 	sub2 := array[2:4]
 	fmt.Println(sub2)
 
+	fmt.Println(array)
+	value := uint8(9)
+	start := 5
+	end := 10
+	for i := start; i < end; i++ {
+		array[i] = value
+	}
+	fmt.Println(array)
+
 	fmt.Println(len(array))
 }
