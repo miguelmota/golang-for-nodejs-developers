@@ -108,7 +108,7 @@ This guide full of examples is intended for people learning Go that are coming f
   - [first-class functions](#first-class-functions)
   -->
   - [errors](#errors)
-  - [try/catch](#try-catch)
+  - [try/catch](#trycatch)
   - [exceptions](#exceptions)
   - [regex](#regex)
   - [exec (sync)](#exec-sync)
