@@ -4040,49 +4040,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
-	/*
-		stmt, err = db.Prepare("select name from foo where id = ?")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer stmt.Close()
-		var name string
-		err = stmt.QueryRow("3").Scan(&name)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(name)
-
-		_, err = db.Exec("delete from foo")
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		_, err = db.Exec("insert into foo(id, name) values(1, 'foo'), (2, 'bar'), (3, 'baz')")
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		rows, err = db.Query("select id, name from foo")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer rows.Close()
-		for rows.Next() {
-			var id int
-			var name string
-			err = rows.Scan(&id, &name)
-			if err != nil {
-				log.Fatal(err)
-			}
-			fmt.Println(id, name)
-		}
-		err = rows.Err()
-		if err != nil {
-			log.Fatal(err)
-		}
-	*/
 }
 ```
 
