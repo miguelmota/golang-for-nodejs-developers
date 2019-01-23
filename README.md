@@ -136,7 +136,7 @@ This guide full of examples is intended for people learning Go that are coming f
   - [stack trace](#stack-trace)
   - [testing](#testing)
   - [benchmarking](#benchmarking)
-  - [documentation](#documenation)
+  - [documentation](#documentation)
   <!--
   - [db](#db)
     - [postgres](#postgres)
