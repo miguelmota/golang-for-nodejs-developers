@@ -4212,7 +4212,7 @@ func (p *Person) SetName(name string) string {
 
 `person_test.go`
 
-```
+```go
 // Example of creating a new Person.
 func ExampleNewPerson() {
 	person := NewPerson("bob")
