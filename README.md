@@ -136,10 +136,10 @@ This guide full of examples is intended for people learning Go that are coming f
   - [stack trace](#stack-trace)
   - [testing](#testing)
   - [benchmarking](#benchmarking)
+  - [documentation](#documenation)
   <!--
   - [db](#db)
     - [postgres](#postgres)
-  - [jsdoc](#jsdoc)
   -->
 - [Contributing](#contributing)
 - [License](#license)
@@ -4129,6 +4129,108 @@ BenchmarkFibRec-8        5000000               340 ns/op               0 B/op   
 BenchmarkFibLoop-8      30000000                46.5 ns/op            96 B/op          1 allocs/op
 PASS
 ok      command-line-arguments  3.502s
+```
+
+### documentation
+---
+
+#### Node.js
+
+[jsdoc](http://usejsdoc.org/)
+
+```node
+/**
+ * Creates a new Person.
+ * @class
+ * @example
+ * const person = new Person('bob')
+ */
+class Person {
+  /**
+   * Create a person.
+   * @param {string} [name] - The person's name.
+   */
+  constructor(name) {
+    this.name = name
+  }
+
+  /**
+   * Get the person's name.
+   * @return {string} The person's name
+   * @example
+   * person.getName()
+   */
+  getName() {
+    return this.name
+  }
+
+  /**
+   * Set the person's name.
+   * @param {string} name - The person's name.
+   * @example
+   * person.setName('bob')
+   */
+  setName(name) {
+    this.name = name
+  }
+}
+```
+
+#### Go
+
+[godoc](https://blog.golang.org/examples)
+
+`person.go`
+
+```go
+package person
+
+import "fmt"
+
+// Person is the structure of a person
+type Person struct {
+	name string
+}
+
+// NewPerson creates a new person. Takes in a name argument.
+func NewPerson(name string) *Person {
+	return &Person{
+		name: name,
+	}
+}
+
+// GetName returns the person's name
+func (p *Person) GetName() string {
+	return p.name
+}
+
+// SetName sets the person's name
+func (p *Person) SetName(name string) string {
+	return p.name
+}
+```
+
+`person_test.go`
+
+```
+// Example of creating a new Person.
+func ExampleNewPerson() {
+	person := NewPerson("bob")
+	_ = person
+}
+
+// Example of getting person's name.
+func ExamplePerson_GetName() {
+	person := NewPerson("bob")
+	fmt.Println(person.GetName())
+	// Output: bob
+}
+
+// Example of setting person's name.
+func ExamplePerson_SetName() {
+	person := NewPerson("alice")
+	person.SetName("bob")
+}
 ```
 
 <!--
