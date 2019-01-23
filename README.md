@@ -135,7 +135,7 @@ This guide full of examples is intended for people learning Go that are coming f
   - [modules](#modules)
   - [stack trace](#stack-trace)
   - [databases](#databases)
-    - [sqlite3](#db)
+    - [sqlite3](#databases)
   - [testing](#testing)
   - [benchmarking](#benchmarking)
   - [documentation](#documentation)
