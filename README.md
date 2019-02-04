@@ -3726,7 +3726,7 @@ import (
 )
 
 func main() {
-	fmt.Fprint(os.Stdout, "hello error\n")
+	fmt.Fprint(os.Stderr, "hello error\n")
 }
 ```
 
