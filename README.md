@@ -651,7 +651,7 @@ Output
 
 #### Go
 
-While there is no *while* in Go, we have found an emulated answer via https://yourbasic.org/golang/do-while-loop/
+(there's no *while* keyword in Go but the same functionality is achieved by using *for*)
 
 ```go
 package main
@@ -660,8 +660,10 @@ import "fmt"
 
 func main() {
 	i := 0
-	for ok := true; ok; ok = i <= 5 {
+
+	for i <= 5 {
 		fmt.Println(i)
+
 		i++
 	}
 }
