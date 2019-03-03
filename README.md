@@ -3888,10 +3888,9 @@ $ go mod tidy
 $ go mod vendor
 
 # publishing a module:
-# Note: Go doesn't have an index of repositories
-# like NPM; Go modules are hosted as public
-# git repositories. To publish, simply push
-# to the repository and tag releases.
+# Note: Go doesn't have an index of repositories like NPM.
+# Go modules are hosted as public git repositories.
+# To publish, simply push to the repository and tag releases.
 ```
 
 ```go
@@ -3900,7 +3899,7 @@ package main
 import (
 	"fmt"
 
-  // importing a module
+	// importing a module
 	"github.com/go-shadow/moment"
 )
 
@@ -3933,7 +3932,7 @@ func Greet(name string) {
 package main
 
 import (
-  // importing exported module
+	// importing exported module
 	greeter "github.com/miguelmota/golang-for-nodejs-developers/examples/greeter_go"
 )
 
