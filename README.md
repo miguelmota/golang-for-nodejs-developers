@@ -135,6 +135,12 @@ This guide full of examples is intended for people learning Go that are coming f
   - [stderr](#stderr)
   - [stdin](#stdin)
   - [modules](#modules)
+    - [installing](#modules)
+    - [updating](#modules)
+    - [removing](#modules)
+    - [importing](#modules)
+    - [exporting](#modules)
+    - [publishing](#modules)
   - [stack trace](#stack-trace)
   - [databases](#databases)
     - [sqlite3](#databases)
@@ -3799,7 +3805,28 @@ Your name is: bob
 
 #### Node.js
 
+```bash
+# initializing metadata and dependencies file (package.json)
+$ npm init
+
+# installing a module
+$ npm install moment --save
+
+# updating a module
+$ npm install moment@latest --save
+
+# removing a module
+$ npm uninstall moment --save
+
+# pruning modules (removing unused modules)
+$ npm prune
+
+# publishing a module
+$ npm publish
+```
+
 ```node
+// importing a module
 const moment = require('moment')
 
 const now = moment().unix()
@@ -3812,14 +3839,60 @@ Output
 1546595748
 ```
 
-Setup
+```node
+// exporting a module
+module.exports = {
+  greet(name) {
+    console.log(`hello ${name}`)
+  }
+}
+```
+
+```node
+// importing exported module
+const greeter = require('./greeter')
+
+greeter.greet('bob')
+```
+
+Output
 
 ```bash
-npm init
-npm install moment --save
+hello bob
 ```
 
 #### Go
+
+Setup
+
+```bash
+# enable Go modules support
+GO111MODULE=on
+
+# initializing dependencies file (go.mod)
+$ go mod init
+
+# installing a module
+$ go get github.com/go-shadow/moment
+
+# updating a module
+$ go get -u github.com/go-shadow/moment
+
+# removing a module
+$ rm -rf $GOPATH/pkg/mod/github.com/go-shadow/moment@v<tag>-<checksum>/
+
+# pruning modules (removing unused modules from dependencies file)
+$ go mod tidy
+
+# download modules being used to local vendor directory (equivalent of downloading node_modules locally)
+$ go mod vendor
+
+# publishing a module:
+# Note: Go doesn't have an index of repositories
+# like NPM; Go modules are hosted as public
+# git repositories. To publish, simply push
+# to the repository and tag releases.
+```
 
 ```go
 package main
@@ -3827,6 +3900,7 @@ package main
 import (
 	"fmt"
 
+  // importing a module
 	"github.com/go-shadow/moment"
 )
 
@@ -3842,11 +3916,36 @@ Output
 1546595748
 ```
 
-Setup
+```go
+package greeter
+
+import (
+	"fmt"
+)
+
+// exporting a module (use a capitalized name to export function)
+func Greet(name string) {
+	fmt.Printf("hello %s", name)
+}
+```
+
+```go
+package main
+
+import (
+  // importing exported module
+	greeter "github.com/miguelmota/golang-for-nodejs-developers/examples/greeter_go"
+)
+
+func main() {
+	greeter.Greet("bob")
+}
+```
+
+Output
 
 ```bash
-go mod init
-go mod vendor
+hello bob
 ```
 
 ### stack trace
