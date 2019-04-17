@@ -1769,10 +1769,24 @@ func Generator() chan string {
 	return c
 }
 
-func main() {
-	gen := Generator()
+func GeneratorFunc() func() (string, bool) {
 
-	for true {
+	s := []string{"hello", "world"}
+	i := -1
+
+	return func() (string, bool) {
+		i++
+		if i >= len(s) {
+			return "", false
+		}
+		return s[i], true
+	}
+}
+
+func main() {
+
+	gen := Generator()
+	for {
 		value, more := <-gen
 		fmt.Println(value, more)
 
@@ -1785,6 +1799,17 @@ func main() {
 	for value := range Generator() {
 		fmt.Println(value)
 	}
+
+	// alternatively
+	genfn := GeneratorFunc()
+	for {
+		value, more := genfn()
+		fmt.Println(value, more)
+
+		if !more {
+			break
+		}
+	}
 }
 ```
 
@@ -1796,6 +1821,9 @@ world true
  false
 hello
 world
+hello true
+world true
+ false
 ```
 
 ### datetime
