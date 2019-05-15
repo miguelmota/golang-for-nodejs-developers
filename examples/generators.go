@@ -16,7 +16,6 @@ func Generator() chan string {
 }
 
 func GeneratorFunc() func() (string, bool) {
-
 	s := []string{"hello", "world"}
 	i := -1
 
@@ -25,12 +24,12 @@ func GeneratorFunc() func() (string, bool) {
 		if i >= len(s) {
 			return "", false
 		}
+
 		return s[i], true
 	}
 }
 
 func main() {
-
 	gen := Generator()
 	for {
 		value, more := <-gen
