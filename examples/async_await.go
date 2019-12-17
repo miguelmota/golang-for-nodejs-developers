@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"time"
+
+	"github.com/prometheus/common/log"
 )
 
 func hello(name string) chan interface{} {
@@ -20,30 +22,20 @@ func hello(name string) chan interface{} {
 	return ch
 }
 
-func await(ch chan interface{}) (string, error) {
-	res := <-ch
-	switch v := res.(type) {
-	case string:
-		return v, nil
-	case error:
-		return "", v
-	default:
-		return "", errors.New("unknown")
-	}
-}
-
 func main() {
-	result, err := await(hello("bob"))
-	if err != nil {
-		fmt.Println(err)
+	result := <-hello("bob")
+	switch v := result.(type) {
+	case string:
+		fmt.Println(v)
+	case error:
+		log.Errorln(v)
 	}
 
-	fmt.Println(result)
-
-	result, err = await(hello("fail"))
-	if err != nil {
-		fmt.Println(err)
+	result = <-hello("fail")
+	switch v := result.(type) {
+	case string:
+		fmt.Println(v)
+	case error:
+		log.Errorln(v)
 	}
-
-	fmt.Println(result)
 }

@@ -1,4 +1,4 @@
-function myPromise(value) {
+function asyncMethod(value) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve('resolved: ' + value)
@@ -7,14 +7,16 @@ function myPromise(value) {
 }
 
 function main() {
-  myPromise('foo').then(res => console.log(res)).catch(err => console.err(err))
+  asyncMethod('foo')
+    .then(result => console.log(result))
+    .catch(err => console.error(err))
 
   Promise.all([
-    myPromise('A'),
-    myPromise('B'),
-    myPromise('C')
+    asyncMethod('A'),
+    asyncMethod('B'),
+    asyncMethod('C')
   ])
-  .then(res => console.log(res))
+  .then(result => console.log(result))
   .catch(err => console.error(err))
 }
 

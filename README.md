@@ -2349,7 +2349,7 @@ true
 #### Node.js
 
 ```node
-function myPromise(value) {
+function asyncMethod(value) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve('resolved: ' + value)
@@ -2358,14 +2358,16 @@ function myPromise(value) {
 }
 
 function main() {
-  myPromise('foo').then(res => console.log(res)).catch(err => console.err(err))
+  asyncMethod('foo')
+    .then(result => console.log(result))
+    .catch(err => console.error(err))
 
   Promise.all([
-    myPromise('A'),
-    myPromise('B'),
-    myPromise('C')
+    asyncMethod('A'),
+    asyncMethod('B'),
+    asyncMethod('C')
   ])
-  .then(res => console.log(res))
+  .then(result => console.log(result))
   .catch(err => console.error(err))
 }
 
@@ -2390,44 +2392,83 @@ import (
 	"fmt"
 	"sync"
 	"time"
+
+	"github.com/prometheus/common/log"
 )
 
-func myPromise(value string) chan string {
-	ch := make(chan string, 1)
+func asyncMethod(value string) chan interface{} {
+	ch := make(chan interface{}, 1)
 	go func() {
 		time.Sleep(1 * time.Second)
 		ch <- "resolved: " + value
+		close(ch)
 	}()
 
 	return ch
 }
 
-func promiseAll(ch ...chan string) []string {
+func resolveAll(ch ...chan interface{}) chan interface{} {
 	var wg sync.WaitGroup
 	res := make([]string, len(ch))
-	for i, c := range ch {
-		wg.Add(1)
-		go func(j int, s chan string) {
-			res[j] = <-s
-			wg.Done()
-		}(i, c)
-	}
+	resCh := make(chan interface{}, 1)
 
-	wg.Wait()
-	return res
+	go func() {
+		for i, c := range ch {
+			wg.Add(1)
+			go func(j int, ifcCh chan interface{}) {
+				ifc := <-ifcCh
+				switch v := ifc.(type) {
+				case error:
+					resCh <- v
+				case string:
+					res[j] = v
+				}
+				wg.Done()
+			}(i, c)
+		}
+
+		wg.Wait()
+		resCh <- res
+		close(resCh)
+	}()
+
+	return resCh
 }
 
 func main() {
-	res := <-myPromise("foo")
-	fmt.Println(res)
+	var wg sync.WaitGroup
+	wg.Add(2)
 
-	all := promiseAll(
-		myPromise("A"),
-		myPromise("B"),
-		myPromise("C"),
-	)
+	go func() {
+		result := <-asyncMethod("foo")
+		switch v := result.(type) {
+		case string:
+			fmt.Println(v)
+		case error:
+			log.Errorln(v)
+		}
 
-	fmt.Println(all)
+		wg.Done()
+	}()
+
+	go func() {
+		result := <-resolveAll(
+			asyncMethod("A"),
+			asyncMethod("B"),
+			asyncMethod("C"),
+		)
+
+		switch v := result.(type) {
+		case []string:
+			fmt.Println(v)
+		case error:
+			log.Errorln(v)
+		}
+
+		wg.Done()
+	}()
+
+	wg.Wait()
 }
 ```
 
@@ -2489,6 +2530,8 @@ import (
 	"errors"
 	"fmt"
 	"time"
+
+	"github.com/prometheus/common/log"
 )
 
 func hello(name string) chan interface{} {
@@ -2505,32 +2548,22 @@ func hello(name string) chan interface{} {
 	return ch
 }
 
-func await(ch chan interface{}) (string, error) {
-	res := <-ch
-	switch v := res.(type) {
-	case string:
-		return v, nil
-	case error:
-		return "", v
-	default:
-		return "", errors.New("unknown")
-	}
-}
-
 func main() {
-	result, err := await(hello("bob"))
-	if err != nil {
-		fmt.Println(err)
+	result := <-hello("bob")
+	switch v := result.(type) {
+	case string:
+		fmt.Println(v)
+	case error:
+		log.Errorln(v)
 	}
 
-	fmt.Println(result)
-
-	result, err = await(hello("fail"))
-	if err != nil {
-		fmt.Println(err)
+	result = <-hello("fail")
+	switch v := result.(type) {
+	case string:
+		fmt.Println(v)
+	case error:
+		log.Errorln(v)
 	}
-
-	fmt.Println(result)
 }
 ```
 
