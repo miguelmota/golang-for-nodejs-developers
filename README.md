@@ -47,6 +47,7 @@ This guide full of examples is intended for people learning Go that are coming f
     - [mapping](#array-iteration)
     - [filtering](#array-iteration)
     - [reducing](#array-iteration)
+	- [sorting](#array-sorting)
   - [buffers](#buffers)
     - [allocate](#buffers)
     - [big endian](#buffers)
@@ -1035,6 +1036,148 @@ Output
 [A B C]
 [a c]
 [A C]
+```
+
+### array sorting
+---
+
+Examples of how to sort an array
+
+#### Node.js
+
+```node
+const stringArray = ['a', 'd', 'z', 'b', 'c', 'y']
+const stringArraySortedAsc = stringArray.sort((a, b) => a > b ? 1 : -1)
+console.log(stringArraySortedAsc)
+
+const stringArraySortedDesc = stringArray.sort((a, b) => a > b ? -1 : 1)
+console.log(stringArraySortedDesc)
+
+
+const numberArray = [1, 3, 5, 9, 4, 2, 0]
+const numberArraySortedAsc = numberArray.sort((a, b) => a - b)
+console.log(numberArraySortedAsc)
+
+const numberArraySortedDesc = numberArray.sort((a, b) => b - a)
+console.log(numberArraySortedDesc)
+
+const collection = [
+    {
+        name: "Li L",
+        age: 8
+    },
+    {
+        name: "Json C",
+        age: 3
+    },
+    {
+        name: "Zack W",
+        age: 15
+    },
+    {
+        name: "Yi M",
+        age: 2
+    }
+]
+
+const collectionSortedByAgeAsc = collection.sort((a, b) => a.age - b.age)
+console.log(collectionSortedByAgeAsc)
+
+const collectionSortedByAgeDesc = collection.sort((a, b) => b.age - a.age)
+console.log(collectionSortedByAgeDesc)
+```
+
+Output
+
+```bash
+[ 'a', 'b', 'c', 'd', 'y', 'z' ]
+[ 'z', 'y', 'd', 'c', 'b', 'a' ]
+[ 0, 1, 2, 3, 4, 5, 9 ]
+[ 9, 5, 4, 3, 2, 1, 0 ]
+[ { name: 'Yi M', age: 2 },
+  { name: 'Json C', age: 3 },
+  { name: 'Li L', age: 8 },
+  { name: 'Zack W', age: 15 } ]
+[ { name: 'Zack W', age: 15 },
+  { name: 'Li L', age: 8 },
+  { name: 'Json C', age: 3 },
+  { name: 'Yi M', age: 2 } ]
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+type Person struct {
+	Name string
+	Age  int
+}
+
+type PersonCollection []Person
+
+func (pc PersonCollection) Len() int {
+	return len(pc)
+}
+
+func (pc PersonCollection) Swap(i, j int) {
+	pc[i], pc[j] = pc[j], pc[i]
+}
+
+func (pc PersonCollection) Less(i, j int) bool {
+	// asc
+	return pc[i].Age < pc[j].Age
+}
+
+func main() {
+	intList := []int{1, 3, 5, 9, 4, 2, 0}
+
+	// asc
+	sort.Ints(intList)
+	fmt.Println(intList)
+	// desc
+	sort.Sort(sort.Reverse(sort.IntSlice(intList)))
+	fmt.Println(intList)
+
+	stringList := []string{"a", "d", "z", "b", "c", "y"}
+
+	// asc
+	sort.Strings(stringList)
+	fmt.Println(stringList)
+	// desc
+	sort.Sort(sort.Reverse(sort.StringSlice(stringList)))
+	fmt.Println(stringList)
+
+	collection := []Person{
+		{"Li L", 8},
+		{"Json C", 3},
+		{"Zack W", 15},
+		{"Yi M", 2},
+	}
+
+	// asc
+	sort.Sort(PersonCollection(collection))
+	fmt.Println(collection)
+	// desc
+	sort.Sort(sort.Reverse(PersonCollection(collection)))
+	fmt.Println(collection)
+}
+```
+
+Output
+
+```bash
+[0 1 2 3 4 5 9]
+[9 5 4 3 2 1 0]
+[a b c d y z]
+[z y d c b a]
+[{Yi M 2} {Json C 3} {Li L 8} {Zack W 15}]
+[{Zack W 15} {Li L 8} {Json C 3} {Yi M 2}]
 ```
 
 ### buffers
