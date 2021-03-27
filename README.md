@@ -206,12 +206,12 @@ hello 5 worlds
 ```go
 package main
 
-import "fmt"
+import "log"
 
 func main() {
-	fmt.Println("hello world")
-	fmt.Printf("hello %s\n", "world")
-	fmt.Printf("hello %d %s\n", 5, "worlds")
+	log.Println("hello world")
+	log.Printf("hello %s\n", "world")
+	log.Printf("hello %d %s\n", 5, "worlds")
 }
 ```
 
