@@ -1,3 +1,3 @@
-console.log('hello world')
-console.log('hello %s', 'world')
-console.log('hello %d %s', 5, 'worlds')
+console.log('print to stdout')
+console.log('format %s %d', 'example', 1)
+console.error('print to stderr')

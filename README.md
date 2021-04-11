@@ -21,6 +21,7 @@ This guide full of examples is intended for people learning Go that are coming f
 - [Examples](#examples)
   - [comments](#comments)
   - [printing](#printing)
+  - [logging](#logging)
   - [variables](#variables)
   - [types](#types)
     - [bool](#types)
@@ -190,17 +191,59 @@ func main() {
 #### Node.js
 
 ```node
-console.log('hello world')
-console.log('hello %s', 'world')
-console.log('hello %d %s', 5, 'worlds')
+console.log('print to stdout')
+console.log('format %s %d', 'example', 1)
+console.error('print to stderr')
 ```
 
 Output
 
 ```bash
-hello world
-hello world
-hello 5 worlds
+print to stdout
+format example 1
+print to stderr
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	fmt.Println("print to stdout")
+	fmt.Printf("format %s %v\n", "example", 1)
+	fmt.Fprintf(os.Stderr, "print to stderr")
+}
+```
+
+Output
+
+```bash
+print to stdout
+format example 1
+print to stderr
+```
+
+**[⬆ back to top](#contents)**
+
+### logging
+---
+
+#### Node.js
+
+```node
+console.log((new Date()).toISOString(), 'hello world')
+```
+
+Output
+
+```bash
+2021-04-11T20:55:07.451Z hello world
 ```
 
 #### Go
@@ -212,17 +255,13 @@ import "log"
 
 func main() {
 	log.Println("hello world")
-	log.Printf("hello %s\n", "world")
-	log.Printf("hello %d %s\n", 5, "worlds")
 }
 ```
 
 Output
 
 ```bash
-hello world
-hello world
-hello 5 worlds
+2021/04/11 13:55:07 hello world
 ```
 
 **[⬆ back to top](#contents)**

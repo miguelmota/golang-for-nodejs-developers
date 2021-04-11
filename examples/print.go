@@ -1,9 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
-	fmt.Println("hello world")
-	fmt.Printf("hello %s\n", "world")
-	fmt.Printf("hello %d %s\n", 5, "worlds")
+	fmt.Println("print to stdout")
+	fmt.Printf("format %s %v\n", "example", 1)
+	fmt.Fprintf(os.Stderr, "print to stderr")
 }
