@@ -182,6 +182,8 @@ func main() {
 }
 ```
 
+**[⬆ back to top](#contents)**
+
 ### printing
 ---
 
@@ -223,6 +225,8 @@ hello world
 hello 5 worlds
 ```
 
+**[⬆ back to top](#contents)**
+
 ### variables
 ---
 
@@ -260,6 +264,8 @@ func main() {
 	const qux = "qux"
 }
 ```
+
+**[⬆ back to top](#contents)**
 
 ### interpolation
 ---
@@ -301,6 +307,8 @@ Output
 ```bash
 bob is 21 years old
 ```
+
+**[⬆ back to top](#contents)**
 
 ### types
 ---
@@ -367,6 +375,8 @@ func main() {
 	var myPointer *int = new(int)
 }
 ```
+
+**[⬆ back to top](#contents)**
 
 ### type check
 ---
@@ -510,6 +520,8 @@ time.Time
 *regexp.Regexp
 ```
 
+**[⬆ back to top](#contents)**
+
 ### if/else
 ---
 
@@ -583,6 +595,8 @@ length is 2
 no
 ```
 
+**[⬆ back to top](#contents)**
+
 ### for
 ---
 
@@ -629,6 +643,8 @@ Output
 4
 5
 ```
+
+**[⬆ back to top](#contents)**
 
 ### while
 ---
@@ -686,6 +702,8 @@ Output
 4
 5
 ```
+
+**[⬆ back to top](#contents)**
 
 ### switch
 ---
@@ -776,6 +794,8 @@ C - falling through
 second default
 ```
 
+**[⬆ back to top](#contents)**
+
 ### arrays
 ---
 
@@ -845,6 +865,8 @@ Output
 [1 2 3 4 5 6 7]
 [-2 -1 0 1 2 3 4 5 6 7]
 ```
+
+**[⬆ back to top](#contents)**
 
 ### uint8 arrays
 ---
@@ -934,6 +956,8 @@ Output
 [0 1 2 3 0 9 9 9 9 9]
 10
 ```
+
+**[⬆ back to top](#contents)**
 
 ### array iteration
 ---
@@ -1037,6 +1061,8 @@ Output
 [a c]
 [A C]
 ```
+
+**[⬆ back to top](#contents)**
 
 ### array sorting
 ---
@@ -1180,6 +1206,8 @@ Output
 [{Zack W 15} {Li L 8} {Json C 3} {Yi M 2}]
 ```
 
+**[⬆ back to top](#contents)**
+
 ### buffers
 ---
 
@@ -1302,6 +1330,8 @@ false
 true
 ```
 
+**[⬆ back to top](#contents)**
+
 ### maps
 ---
 
@@ -1397,6 +1427,8 @@ bar 200
 baz 300
 ```
 
+**[⬆ back to top](#contents)**
+
 ### objects
 ---
 
@@ -1467,6 +1499,8 @@ bar
 bar
 ```
 
+**[⬆ back to top](#contents)**
+
 ### functions
 ---
 
@@ -1509,6 +1543,8 @@ Output
 ```bash
 5
 ```
+
+**[⬆ back to top](#contents)**
 
 ### default values
 ---
@@ -1569,6 +1605,8 @@ hello stranger
 hello bob
 ```
 
+**[⬆ back to top](#contents)**
+
 ### destructuring
 ---
 
@@ -1626,6 +1664,8 @@ foo bar
 foo bar
 ```
 
+**[⬆ back to top](#contents)**
+
 ### spread operator
 ---
 
@@ -1667,6 +1707,8 @@ Output
 ```bash
 1 2 3 4 5
 ```
+
+**[⬆ back to top](#contents)**
 
 ### rest operator
 ---
@@ -1722,6 +1764,8 @@ Output
 15
 ```
 
+**[⬆ back to top](#contents)**
+
 ### swapping
 ---
 
@@ -1770,6 +1814,8 @@ Output
 foo bar
 bar foo
 ```
+
+**[⬆ back to top](#contents)**
 
 ### classes
 ---
@@ -1853,6 +1899,8 @@ Output
 bar
 qux
 ```
+
+**[⬆ back to top](#contents)**
 
 ### generators
 ---
@@ -1968,6 +2016,8 @@ world true
  false
 ```
 
+**[⬆ back to top](#contents)**
+
 ### datetime
 ---
 
@@ -2043,6 +2093,8 @@ Output
 01/17/2019
 ```
 
+**[⬆ back to top](#contents)**
+
 ### timeout
 ---
 
@@ -2092,6 +2144,8 @@ Output
 ```bash
 called
 ```
+
+**[⬆ back to top](#contents)**
 
 ### interval
 ---
@@ -2163,6 +2217,8 @@ called 2
 called 3
 ```
 
+**[⬆ back to top](#contents)**
+
 ### IIFE
 ---
 
@@ -2201,6 +2257,8 @@ Output
 ```bash
 hello bob
 ```
+
+**[⬆ back to top](#contents)**
 
 ### files
 ---
@@ -2312,6 +2370,8 @@ Output
 hello world.
 ```
 
+**[⬆ back to top](#contents)**
+
 ### json
 ---
 
@@ -2373,6 +2433,8 @@ Output
 &{bar}
 {"foo":"bar"}
 ```
+
+**[⬆ back to top](#contents)**
 
 ### big numbers
 ---
@@ -2485,6 +2547,8 @@ Output
 false
 true
 ```
+
+**[⬆ back to top](#contents)**
 
 ### promises
 ---
@@ -2622,6 +2686,8 @@ resolved: foo
 [resolved: A resolved: B resolved: C]
 ```
 
+**[⬆ back to top](#contents)**
+
 ### async/await
 ---
 
@@ -2716,6 +2782,8 @@ Output
 hello bob
 failed
 ```
+
+**[⬆ back to top](#contents)**
 
 ### streams
 ---
@@ -2821,6 +2889,8 @@ received: abc
 received: xyc
 ```
 
+**[⬆ back to top](#contents)**
+
 ### event emitter
 ---
 
@@ -2890,6 +2960,8 @@ Output
 hello world
 hello other world
 ```
+
+**[⬆ back to top](#contents)**
 
 ### errors
 ---
@@ -2963,6 +3035,8 @@ some error
 my custom error
 ```
 
+**[⬆ back to top](#contents)**
+
 ### try/catch
 ---
 
@@ -3024,6 +3098,8 @@ Output
 caught error: my error
 ```
 
+**[⬆ back to top](#contents)**
+
 ### exceptions
 ---
 
@@ -3081,6 +3157,8 @@ Output
 ```bash
 caught exception: my exception
 ```
+
+**[⬆ back to top](#contents)**
 
 ### regex
 ---
@@ -3143,6 +3221,8 @@ true
 [111 222 333]
 ```
 
+**[⬆ back to top](#contents)**
+
 ### exec (sync)
 ---
 
@@ -3187,6 +3267,8 @@ Output
 ```bash
 hello world
 ```
+
+**[⬆ back to top](#contents)**
 
 ### exec (async)
 ---
@@ -3240,6 +3322,8 @@ Output
 ```bash
 hello world
 ```
+
+**[⬆ back to top](#contents)**
 
 ### tcp server
 ---
@@ -3315,6 +3399,8 @@ Output
 $ echo 'hello' | nc localhost 3000
 Received: hello
 ```
+
+**[⬆ back to top](#contents)**
 
 ### udp server
 ---
@@ -3397,6 +3483,8 @@ server listening [::]:3000
 received: hello world from 127.0.0.1:50275
 ```
 
+**[⬆ back to top](#contents)**
+
 ### http server
 ---
 
@@ -3450,6 +3538,8 @@ Output
 $ curl http://localhost:8080
 hello world
 ```
+
+**[⬆ back to top](#contents)**
 
 ### url parse
 ---
@@ -3519,6 +3609,8 @@ sub.example.com
 /somepath
 map[foo:[bar]]
 ```
+
+**[⬆ back to top](#contents)**
 
 ### gzip
 ---
@@ -3601,6 +3693,8 @@ Output
 [31 139 8 0 0 0 0 0 0 255 202 72 205 201 201 87 40 207 47 202 73 1 4 0 0 255 255 133 17 74 13 11 0 0 0]
 hello world
 ```
+
+**[⬆ back to top](#contents)**
 
 ### dns
 ---
@@ -3694,6 +3788,8 @@ Output
 [facebook-domain-verification=22rm551cu4k0ab0bxsw536tlds4h95 docusign=05958488-4752-4ef2-95eb-aa7ba8a3bd0e v=spf1 include:_spf.google.com ~all globalsign-smime-dv=CDYX+XFHUw2wml6/Gb8+59BsH31KzUr6c1l2BPvqKX8=]
 ```
 
+**[⬆ back to top](#contents)**
+
 ### crypto
 ---
 
@@ -3737,6 +3833,8 @@ Output
 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
 ```
 
+**[⬆ back to top](#contents)**
+
 ### env vars
 ---
 
@@ -3779,6 +3877,8 @@ $ API_KEY=foobar go run examples/env_vars.go
 foobar
 ```
 
+**[⬆ back to top](#contents)**
+
 ### cli args
 ---
 
@@ -3819,6 +3919,8 @@ Output
 $ go run examples/cli_args.go foo bar qux
 [foo bar qux]
 ```
+
+**[⬆ back to top](#contents)**
 
 ### cli flags
 ---
@@ -3873,6 +3975,8 @@ foo: bar
 qux: true
 ```
 
+**[⬆ back to top](#contents)**
+
 ### stdout
 ---
 
@@ -3909,6 +4013,8 @@ Output
 hello world
 ```
 
+**[⬆ back to top](#contents)**
+
 ### stderr
 ---
 
@@ -3944,6 +4050,8 @@ Output
 ```bash
 hello error
 ```
+
+**[⬆ back to top](#contents)**
 
 ### stdin
 ---
@@ -4002,6 +4110,8 @@ Output
 Enter name: bob
 Your name is: bob
 ```
+
+**[⬆ back to top](#contents)**
 
 ### modules
 ---
@@ -4150,6 +4260,8 @@ Output
 hello bob
 ```
 
+**[⬆ back to top](#contents)**
+
 ### stack trace
 ---
 
@@ -4234,6 +4346,8 @@ main.foo(...)
 main.main()
         /Users/bob/examples/stack_trace.go:20 +0xa2
 ```
+
+**[⬆ back to top](#contents)**
 
 ### databases
 ---
@@ -4354,6 +4468,8 @@ Output
 3 charlie
 ```
 
+**[⬆ back to top](#contents)**
+
 ### testing
 ---
 
@@ -4447,6 +4563,8 @@ $ go test -v examples/example_test.go
 PASS
 ok      command-line-arguments  0.008s
 ```
+
+**[⬆ back to top](#contents)**
 
 ### benchmarking
 ---
@@ -4551,6 +4669,8 @@ PASS
 ok      command-line-arguments  3.502s
 ```
 
+**[⬆ back to top](#contents)**
+
 ### documentation
 ---
 
@@ -4653,6 +4773,8 @@ func ExamplePerson_SetName() {
 }
 ```
 
+**[⬆ back to top](#contents)**
+
 <!--
 ### title
 ---
@@ -4676,6 +4798,8 @@ Output
 
 ```bash
 ```
+
+**[⬆ back to top](#contents)**
 -->
 
 ## Contributing
