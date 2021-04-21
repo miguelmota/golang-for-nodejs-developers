@@ -264,6 +264,8 @@ Output
 2021/04/11 13:55:07 hello world
 ```
 
+_(Package `log` writes to standard error ánd prints the date and time of each logged message)_
+
 **[⬆ back to top](#contents)**
 
 ### variables
