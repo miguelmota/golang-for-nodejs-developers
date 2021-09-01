@@ -25,15 +25,15 @@ console.log(Buffer.from(bn.toString(16), 'hex'))
  * @returns number
  */
 function cmp(a, b) {
-    if (a < b) {
-        return -1;
-    }
+	if (a < b) {
+		return -1;
+	}
 
-    if (a > b) {
-        return 1;
-    }
+	if (a > b) {
+		return 1;
+	}
 
-    return 0;
+	return 0;
 }
 
 let bn2 = BigInt(5)
