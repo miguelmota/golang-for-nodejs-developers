@@ -30,11 +30,13 @@ func main() {
 	fmt.Println(hex.EncodeToString(bn.Bytes()))
 	fmt.Println(bn.Bytes())
 
-	bn2 := big.NewInt(5)
+	bn2 := big.NewInt(100)
 	isEqual := bn.Cmp(bn2) == 0
 	fmt.Println(isEqual)
 
-	bn2 = big.NewInt(75)
-	isEqual = bn.Cmp(bn2) == 0
-	fmt.Println(isEqual)
+	isGreater := bn.Cmp(bn2) == 1
+	fmt.Println(isGreater)
+
+	isLesser := bn.Cmp(bn2) == -1
+	fmt.Println(isLesser)
 }

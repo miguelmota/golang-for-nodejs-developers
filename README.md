@@ -2494,7 +2494,7 @@ console.log(bn.toString(10))
 bn = BigInt(0x4b)
 console.log(bn.toString(10))
 
-bn = BigInt('0x' + '4b')
+bn = BigInt('0x4b')
 console.log(bn.toString(10))
 
 bn = BigInt('0x' + Buffer.from('4b', 'hex').toString('hex'))
@@ -2503,33 +2503,15 @@ console.log(Number(bn))
 console.log(bn.toString(16))
 console.log(Buffer.from(bn.toString(16), 'hex'))
 
-/**
- * Compare numbers and return -1 (a < b), 0 (a == b), or 1 (a > b)
- *
- * @param {BigInt} a 
- * @param {BigInt} b
- * 
- * @returns number
- */
-function cmp(a, b) {
-	if (a < b) {
-		return -1;
-	}
-
-	if (a > b) {
-		return 1;
-	}
-
-	return 0;
-}
-
-let bn2 = BigInt(5)
-let isEqual = cmp(bn, bn2) == 0
+let bn2 = BigInt(100)
+let isEqual = bn === bn2
 console.log(isEqual)
 
-bn2 = BigInt('0x' + '4b')
-isEqual = cmp(bn, bn2) == 0
-console.log(isEqual)
+let isGreater = bn > bn2
+console.log(isGreater)
+
+let isLesser = bn < bn2
+console.log(isLesser)
 ```
 
 Output
@@ -2543,6 +2525,7 @@ Output
 75
 4b
 <Buffer 4b>
+false
 false
 true
 ```
@@ -2582,13 +2565,15 @@ func main() {
 	fmt.Println(hex.EncodeToString(bn.Bytes()))
 	fmt.Println(bn.Bytes())
 
-	bn2 := big.NewInt(5)
+	bn2 := big.NewInt(100)
 	isEqual := bn.Cmp(bn2) == 0
 	fmt.Println(isEqual)
 
-	bn2 = big.NewInt(75)
-	isEqual = bn.Cmp(bn2) == 0
-	fmt.Println(isEqual)
+	isGreater := bn.Cmp(bn2) == 1
+	fmt.Println(isGreater)
+
+	isLesser := bn.Cmp(bn2) == -1
+	fmt.Println(isLesser)
 }
 ```
 
@@ -2603,6 +2588,7 @@ Output
 75
 4b
 [75]
+false
 false
 true
 ```
