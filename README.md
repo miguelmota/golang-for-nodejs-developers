@@ -125,9 +125,11 @@ This guide full of examples is intended for people learning Go that are coming f
     - [compress](#gzip)
     - [decompress](#gzip)
   - [dns](#dns)
+    - [ns lookup](#dns)
     - [ip lookup](#dns)
     - [mx lookup](#dns)
     - [txt lookup](#dns)
+    - [set resolution servers](#dns)
   - [crypto](#crypto)
     - [sha256](#crypto)
   - [env vars](#env-vars)
@@ -3744,12 +3746,20 @@ hello world
 ### dns
 ---
 
-TXT lookup example
+DNS lookup examples
 
 #### Node.js
 
 ```node
 const dns = require('dns')
+
+dns.resolveNs('google.com', (err, ns) => {
+  if (err) {
+    console.error(err)
+  }
+
+  console.log(ns)
+})
 
 dns.resolve4('google.com', (err, ips) => {
   if (err) {
@@ -3774,11 +3784,28 @@ dns.resolveTxt('google.com', (err, txt) => {
 
   console.log(txt)
 })
+
+dns.setServers(['1.1.1.1'])
+console.log(dns.getServers())
+
+dns.resolveNs('google.com', (err, ns) => {
+  if (err) {
+    console.error(err)
+  }
+
+  console.log(ns)
+})
 ```
 
 Output
 
 ```bash
+[
+  'ns2.google.com',
+  'ns3.google.com',
+  'ns4.google.com',
+  'ns1.google.com'
+]
 [ '172.217.11.78' ]
 [ { exchange: 'alt4.aspmx.l.google.com', priority: 50 },
   { exchange: 'alt2.aspmx.l.google.com', priority: 30 },
@@ -3789,6 +3816,13 @@ Output
   [ 'docusign=05958488-4752-4ef2-95eb-aa7ba8a3bd0e' ],
   [ 'facebook-domain-verification=22rm551cu4k0ab0bxsw536tlds4h95' ],
   [ 'globalsign-smime-dv=CDYX+XFHUw2wml6/Gb8+59BsH31KzUr6c1l2BPvqKX8=' ] ]
+[ '1.1.1.1' ]
+[
+  'ns1.google.com',
+  'ns2.google.com',
+  'ns4.google.com',
+  'ns3.google.com'
+]
 ```
 
 #### Go
@@ -3802,6 +3836,13 @@ import (
 )
 
 func main() {
+	ns, err := net.LookupNS("google.com")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("%s\n", ns)
+
 	ips, err := net.LookupIP("google.com")
 	if err != nil {
 		panic(err)
@@ -3822,15 +3863,30 @@ func main() {
 	}
 
 	fmt.Println(txt)
+
+	r := &net.Resolver{
+		PreferGo: true,
+		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+			d := net.Dialer{
+				Timeout: time.Millisecond * time.Duration(10_000),
+			}
+			return d.DialContext(ctx, "udp", "1.1.1.1:53")
+		},
+	}
+
+	ns, _ = r.LookupNS(context.Background(), "google.com")
+	fmt.Printf("%s", ns)
 }
 ```
 
 Output
 
 ```bash
+[%!s(*net.NS=&{ns3.google.com.}) %!s(*net.NS=&{ns4.google.com.}) %!s(*net.NS=&{ns1.google.com.}) %!s(*net.NS=&{ns2.google.com.})]
 [172.217.5.78 2607:f8b0:4007:80d::200e]
 [0xc0000ba2e0 0xc0000ba260 0xc0000ba2a0 0xc0000ba280 0xc0000ba300]
 [facebook-domain-verification=22rm551cu4k0ab0bxsw536tlds4h95 docusign=05958488-4752-4ef2-95eb-aa7ba8a3bd0e v=spf1 include:_spf.google.com ~all globalsign-smime-dv=CDYX+XFHUw2wml6/Gb8+59BsH31KzUr6c1l2BPvqKX8=]
+[%!s(*net.NS=&{ns2.google.com.}) %!s(*net.NS=&{ns1.google.com.}) %!s(*net.NS=&{ns3.google.com.}) %!s(*net.NS=&{ns4.google.com.})]
 ```
 
 **[⬆ back to top](#contents)**
