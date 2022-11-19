@@ -4913,4 +4913,6 @@ If updating code, update both the README and the code in the [examples](examples
 
 ## License
 
-[MIT](LICENSE)
+Released under the [MIT](./LICENSE) license.
+
+© [Miguel Mota](https://github.com/miguelmota)
