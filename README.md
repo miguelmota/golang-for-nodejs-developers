@@ -288,12 +288,22 @@ const qux = 'qux'
 
 #### Go
 
-(variables are block scoped in Go)
-
 ```go
 package main
 
+// Global variables
+// explicit
+var foo string = "foo"
+
+// type inferred
+var bar = "foo"
+
+// Global constant
+// constant
+const qux = "qux"
+
 func main() {
+	// Local variables
 	// explicit
 	var foo string = "foo"
 
@@ -303,7 +313,7 @@ func main() {
 	// shorthand
 	baz := "bar"
 
-	// constant
+	// Local constant
 	const qux = "qux"
 }
 ```
